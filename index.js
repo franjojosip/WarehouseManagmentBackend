@@ -25,7 +25,7 @@ mongoose.connect(mongoDBurl, { useNewUrlParser: true, useFindAndModify: false, u
   });
 });
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 app.listen(port);
 
 module.exports = app;

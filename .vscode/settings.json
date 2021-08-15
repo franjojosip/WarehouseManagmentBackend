@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/3b3678e5-1ee6-4610-9fb3-4fd1804d7f1e/resourceGroups/WarehouseManagment/providers/Microsoft.Web/sites/upravljanjeskladistima",
+    "appService.deploySubpath": "."
+}
