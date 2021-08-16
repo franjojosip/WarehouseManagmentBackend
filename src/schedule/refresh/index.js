@@ -60,7 +60,24 @@ async function refresh(req, res) {
           let date = moment().format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
-          await getPdfData(email, title);
+          sendEmail(title, email, null);
+
+          let data = await getPdfData();
+          if (data.length > 0) {
+            let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
+            sendEmail(title, email, path);
+          }
+          else {
+            sendEmail(title, email, null);
+          }
+          let logData = getLogData(data);
+
+          const newNotificationLog = new NotificationLog();
+          newNotificationLog.notification_type_id = setting.notification_type_id.id;
+          newNotificationLog.subject = "Dnevni izvještaj";
+          newNotificationLog.email = email;
+          newNotificationLog.data = logData;
+          await newNotificationLog.save();
         }, {
           scheduled: true,
           timezone: "Europe/Zagreb"
@@ -92,9 +109,6 @@ async function refresh(req, res) {
           newNotificationLog.email = email;
           newNotificationLog.data = logData;
           await newNotificationLog.save();
-        }, {
-          scheduled: true,
-          timezone: "Europe/Zagreb"
         });
       }
       else if (setting.notification_type_id.name == "Mjesečna obavijest") {
@@ -122,9 +136,6 @@ async function refresh(req, res) {
           newNotificationLog.email = email;
           newNotificationLog.data = logData;
           await newNotificationLog.save();
-        }, {
-          scheduled: true,
-          timezone: "Europe/Zagreb"
         });
       }
     });
@@ -317,7 +328,7 @@ function generatePdf(title, docTitle, data) {
 };
 
 
-async function getPdfData(email, title) {
+async function getPdfData() {
   let stocks = await Stock.find({})
     .populate("warehouse_id", { name: 1, location_id: 1 })
     .populate("product_id", { name: 1 })
@@ -382,24 +393,7 @@ async function getPdfData(email, title) {
       grouppedReportReciepts[index].data.push(stock);
     }
   });
-
-  let data = grouppedReportReciepts.sort(compareCities).sort(deepCompareLocations);
-
-  if (data.length > 0) {
-    let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
-    sendEmail(title, email, path);
-  }
-  else {
-    sendEmail(title, email, null);
-  }
-  let logData = getLogData(data);
-
-  const newNotificationLog = new NotificationLog();
-  newNotificationLog.notification_type_id = setting.notification_type_id.id;
-  newNotificationLog.subject = "Dnevni izvještaj";
-  newNotificationLog.email = email;
-  newNotificationLog.data = logData;
-  await newNotificationLog.save();
+  return grouppedReportReciepts.sort(compareCities).sort(deepCompareLocations);
 }
 
 function replaceUtf8(word) {
