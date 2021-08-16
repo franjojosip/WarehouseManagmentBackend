@@ -70,7 +70,7 @@ async function refresh(req, res) {
             }
             catch(error){
 
-              sendEmail(moment().format("YYYY/MM/DD HH:mm").toString(), email, null);
+              sendEmail(moment().utc().format("YYYY/MM/DD HH:mm").toString(), email, null);
             }
             sendEmail(title, email, path);
           }
