@@ -62,16 +62,12 @@ async function refresh(req, res) {
           let title = `Dnevni izvještaj ${date}`;
 
           let data = await getPdfData();
-          try {
-            if (data.length > 0) {
-              generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data, email);
-            }
-            else {
-              sendEmail(title, email, null);
-            }
+          if (data.length > 0) {
+            let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
+            sendEmail(title, email, path);
           }
-          catch (err) {
-            sendEmail(err.toString(), email)
+          else {
+            sendEmail(title, email, null);
           }
           let logData = getLogData(data);
 
@@ -98,7 +94,8 @@ async function refresh(req, res) {
 
           let data = await getPdfData();
           if (data.length > 0) {
-            generatePdf("Tjedni izvještaj", "tjedni_izvjestaj", data, email);
+            let path = generatePdf("Tjedni izvještaj", "tjedni_izvjestaj", data);
+            sendEmail(title, email, path);
           }
           else {
             sendEmail(title, email, null);
@@ -124,7 +121,8 @@ async function refresh(req, res) {
 
           let data = await getPdfData();
           if (data.length > 0) {
-            generatePdf("Mjesečni izvještaj", "mjesecni_izvjestaj", data, email);
+            let path = generatePdf("Mjesečni izvještaj", "mjesecni_izvjestaj", data);
+            sendEmail(title, email, path);
           }
           else {
             sendEmail(title, email, null);
@@ -220,7 +218,7 @@ function sendEmail(title, email, path) {
     if (error) {
       console.log(error);
     }
-    if (path) {
+    if(path){
       fs.unlink(path, function (err) {
         if (err) console.log(err);
       });
@@ -228,7 +226,7 @@ function sendEmail(title, email, path) {
   });
 }
 
-function generatePdf(title, docTitle, data, email) {
+function generatePdf(title, docTitle, data) {
   let tableRows = [];
   let head = [];
   let y = 85;
@@ -327,7 +325,7 @@ function generatePdf(title, docTitle, data, email) {
   let path = `src/schedule/pdf/${date}_${docTitle}.pdf`;
 
   doc.save(path);
-  sendEmail(title, email, path);
+  return path;
 };
 
 
