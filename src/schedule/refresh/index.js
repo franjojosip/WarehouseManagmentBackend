@@ -57,11 +57,12 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * *`, async () => {
-          let date = moment().format("YYYY/MM/DD HH:mm").toString();
+          let date = moment(new Date()).format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
 
           let data = await getPdfData();
+          sendEmail(data.length.toString(), email, null);
           if (data.length > 0) {
             let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
             sendEmail(title, email, path);
@@ -88,7 +89,7 @@ async function refresh(req, res) {
         let day_of_week = setting.day_of_week;
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * ${day_of_week}`, async () => {
-          let date = moment().format("YYYY/MM/DD HH:mm").toString();
+          let date = moment(new Date()).format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Tjedni izvještaj ${date}`;
 
@@ -115,7 +116,7 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * 1-12 *`, async () => {
-          let date = moment().format("YYYY/MM/DD HH:mm").toString();
+          let date = moment(new Date()).format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Mjesečni izvještaj ${date}`;
 
