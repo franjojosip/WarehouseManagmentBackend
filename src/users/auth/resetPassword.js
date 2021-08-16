@@ -6,7 +6,6 @@ const PaswordRequest = require("../passwordRequestSchema");
 
 const serializer = Joi.object({
   token: Joi.string().length(24).required(),
-  old_password: Joi.string().required(),
   new_password: Joi.string().required(),
 });
 
@@ -18,33 +17,28 @@ async function resetPassword(req, res) {
     }
     const paswordRequest = await PaswordRequest.findOne({ _id: result.value.token });
 
-    if(!paswordRequest){
-        return res.status(404).json({ error: "Zahtjev nije pronađen!" });
+    if (!paswordRequest) {
+      return res.status(404).json({ error: "Zahtjev nije pronađen!" });
     }
-    if(paswordRequest.isUsed){
-        return res.status(400).json({ error: "Zahtjev za resetiranje lozinke je istekao!" });
+    if (paswordRequest.isUsed) {
+      return res.status(400).json({ error: "Zahtjev za resetiranje lozinke je istekao!" });
     }
 
 
     const user = await User.findOne({ _id: paswordRequest.user_id });
     if (!user) return res.status(401).json({ error: "Neispravni korisnički podatci!" });
 
-    const passwordHash = user.password;
-    if (bcrypt.compareSync(result.value.old_password, passwordHash)) {
-        
-      const passwordHash = bcrypt.hashSync(result.value.new_password, 10);
-      user.refreshToken = "";
-      user.password = passwordHash;
-      await user.save();
+    const passwordHash = bcrypt.hashSync(result.value.new_password, 10);
+    user.refreshToken = "";
+    user.password = passwordHash;
+    await user.save();
 
-      paswordRequest.isUsed = true;
-      await paswordRequest.save();
+    paswordRequest.isUsed = true;
+    await paswordRequest.save();
 
-      return res.status(200).json({
-          status: "Uspješna izmjena lozinke!"
-      });
-    }
-    return res.status(401).json({ error: "Neispravni korisnički podatci!" });
+    return res.status(200).json({
+      status: "Uspješna izmjena lozinke!"
+    });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }

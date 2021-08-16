@@ -63,6 +63,7 @@ async function requestResetPassword(req, res) {
                 '<html><head><title>' + user.fname + " " + user.lname + '</title>' +
                 '</head><body><div>' +
                 '<h2>Zatraženi su podatci za resetiranje lozinke.</h2>' +
+                '<p>Ukoliko niste zatražili resetiranje lozinke, zanemarite ovaj email!</p>' +
                 '<p>Trajanje linka je ograničeno na 12 od vremena primitka.</p>' +
                 '<p>Kliknite na sljedeći <a href="' + link + '">link</a> za postavljanje nove lozinke.</p>' +
                 '</div></body></html>'
