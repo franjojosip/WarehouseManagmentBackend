@@ -62,9 +62,10 @@ async function refresh(req, res) {
           let title = `Dnevni izvještaj ${date}`;
 
           let data = await getPdfData();
-          sendEmail(moment().tz("Europe/Zagreb").format("DD_MM_YYYY_HH_mm").toString(), email)
+          sendEmail(path, email)
           if (data.length > 0) {
             let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
+            sendEmail(path, email)
             sendEmail(title, email, path);
           }
           else {
@@ -196,7 +197,7 @@ function sendEmail(title, email, path) {
       html: html,
       attachments: [{
         filename: nameArray[nameArray.length - 1],
-        path: path,
+        path: __dirname + path,
         contentType: 'application/pdf'
       }],
     };
