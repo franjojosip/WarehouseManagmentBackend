@@ -57,7 +57,7 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * *`, async () => {
-          let date = moment(new Date()).format("YYYY/MM/DD HH:mm").toString();
+          let date = moment().tz("Europe/Zagreb").format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
 
@@ -88,7 +88,7 @@ async function refresh(req, res) {
         let day_of_week = setting.day_of_week;
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * ${day_of_week}`, async () => {
-          let date = moment(new Date()).format("YYYY/MM/DD HH:mm").toString();
+          let date = moment().tz("Europe/Zagreb").format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Tjedni izvještaj ${date}`;
 
@@ -115,7 +115,7 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * 1-12 *`, async () => {
-          let date = moment(new Date()).format("YYYY/MM/DD HH:mm").toString();
+          let date = moment().tz("Europe/Zagreb").format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Mjesečni izvještaj ${date}`;
 
@@ -320,7 +320,7 @@ function generatePdf(title, docTitle, data) {
     });
   });
 
-  let date = moment().add(2, "hours").format("DD_MM_YYYY_HH_mm").toString();
+  let date = moment().tz("Europe/Zagreb").format("DD_MM_YYYY_HH_mm").toString();
 
   let path = `src/schedule/pdf/${date}_${docTitle}.pdf`;
 
