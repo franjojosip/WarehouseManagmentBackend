@@ -22,10 +22,40 @@ async function list(req, res) {
         users: warehouse.user_ids.length > 0 ? users : []
       };
     });
-    return res.status(200).json({ warehouses });
+    return res.status(200).json({ warehouses: warehouses.sort(compare).sort(deepCompare).sort(warehouseNameCompare) });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
+}
+
+function compare(a, b) {
+  if (a.city_name[0] < b.city_name[0]) {
+    return -1;
+  }
+  if (a.city_name[0] > b.city_name[0]) {
+    return 1;
+  }
+  return 0;
+}
+
+function deepCompare(a, b) {
+  if (a.city_name[0] == b.city_name[0] && a.location_name[0] < b.location_name[0]) {
+    return -1;
+  }
+  if (a.city_name[0] == b.city_name[0] && a.location_name[0] > b.location_name[0]) {
+    return 1;
+  }
+  return 0;
+}
+
+function warehouseNameCompare(a, b) {
+  if (a.city_name[0] == b.city_name[0] && a.location_name[0] == b.location_name[0] && a.name[0] < b.name[0]) {
+    return -1;
+  }
+  if (a.city_name[0] == b.city_name[0] && a.location_name[0] == b.location_name[0] && a.name[0] > b.name[0]) {
+    return 1;
+  }
+  return 0;
 }
 
 module.exports = list;
