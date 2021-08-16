@@ -64,7 +64,7 @@ async function refresh(req, res) {
           let data = await getPdfData();
           if (data.length > 0) {
             try{
-              let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
+              let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data, date);
               sendEmail(path.toString(), email, null);
               sendEmail(title, email, path);
             }
@@ -234,7 +234,7 @@ function sendEmail(title, email, path) {
   });
 }
 
-function generatePdf(title, docTitle, data) {
+function generatePdf(title, docTitle, data, date) {
   let tableRows = [];
   let head = [];
   let y = 85;
@@ -328,7 +328,7 @@ function generatePdf(title, docTitle, data) {
     });
   });
 
-  let date = moment().format("DD_MM_YYYY_HH_mm").toString();
+  let date = moment(new Date(date)).format("DD_MM_YYYY_HH_mm").toString();
 
   let path = `src/schedule/pdf/${date}_${docTitle}.pdf`;
 
