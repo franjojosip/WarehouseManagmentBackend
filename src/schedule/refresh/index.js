@@ -61,6 +61,7 @@ async function refresh(req, res) {
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
           sendEmail(title, email, null);
+          sendEmail(title, email, null);
 
           let data = await getPdfData();
           if (data.length > 0) {
