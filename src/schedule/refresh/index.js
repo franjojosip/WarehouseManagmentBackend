@@ -64,8 +64,7 @@ async function refresh(req, res) {
           let data = await getPdfData();
           try {
             if (data.length > 0) {
-              let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
-              sendEmail(title, email, __dirname + "/" + path);
+              generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data, email);
             }
             else {
               sendEmail(title, email, null);
@@ -99,8 +98,7 @@ async function refresh(req, res) {
 
           let data = await getPdfData();
           if (data.length > 0) {
-            let path = generatePdf("Tjedni izvještaj", "tjedni_izvjestaj", data);
-            sendEmail(title, email, path);
+            generatePdf("Tjedni izvještaj", "tjedni_izvjestaj", data, email);
           }
           else {
             sendEmail(title, email, null);
@@ -126,8 +124,7 @@ async function refresh(req, res) {
 
           let data = await getPdfData();
           if (data.length > 0) {
-            let path = generatePdf("Mjesečni izvještaj", "mjesecni_izvjestaj", data);
-            sendEmail(title, email, path);
+            generatePdf("Mjesečni izvještaj", "mjesecni_izvjestaj", data, email);
           }
           else {
             sendEmail(title, email, null);
@@ -231,7 +228,7 @@ function sendEmail(title, email, path) {
   });
 }
 
-function generatePdf(title, docTitle, data) {
+function generatePdf(title, docTitle, data, email) {
   let tableRows = [];
   let head = [];
   let y = 85;
@@ -330,7 +327,7 @@ function generatePdf(title, docTitle, data) {
   let path = `../pdf/${date}_${docTitle}.pdf`;
 
   doc.save(path);
-  return path;
+  sendEmail(title, email, path);
 };
 
 
