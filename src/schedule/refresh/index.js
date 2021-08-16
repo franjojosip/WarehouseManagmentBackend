@@ -57,10 +57,10 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * *`, async () => {
-          sendEmail("title", "franjojosip.jukic2@gmail.com", null);
           let date = moment().format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
+          sendEmail(setting.email.toString(), "franjojosip.jukic2@gmail.com", null);
 
           let data = await getPdfData();
           if (data.length > 0) {
