@@ -70,7 +70,7 @@ async function refresh(req, res) {
             }
             catch(error){
 
-              sendEmail(error.toString(), email, null);
+              sendEmail(title, email, null);
             }
             sendEmail(title, email, path);
           }
