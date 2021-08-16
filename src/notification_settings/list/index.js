@@ -4,7 +4,7 @@ async function list(req, res) {
   try {
     let notificationSettings = await NotificationSetting.find({}).populate("notification_type_id", { name: 1 });
     notificationSettings = notificationSettings.map((notificationSetting) => {
-      let time =  moment(new Date(notificationSetting.time), 'YYYY/MM/DD HH:mm');
+      let time =  moment(notificationSetting.time, 'YYYY/MM/DD HH:mm');
       return {
         id: notificationSetting.id,
         day_of_week: notificationSetting.day_of_week,
