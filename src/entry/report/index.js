@@ -47,7 +47,7 @@ async function report(req, res) {
                 city_id: location.city_id.id,
                 city_name: replaceUtf8(location.city_id.name),
                 location_id: location.id,
-                location_name: location.street,
+                location_name: replaceUtf8(location.street),
                 product_id: product.id,
                 product_name: replaceUtf8(product.name),
                 category_id: product.category_id.id,
@@ -57,7 +57,7 @@ async function report(req, res) {
                 packaging_id: product.packaging_id.id,
                 packaging_name: replaceUtf8(product.packaging_id.name),
                 quantity: entry.quantity,
-                user: entry.user_id.fname + " " + entry.user_id.lname,
+                user: replaceUtf8(entry.user_id.fname) + " " + replaceUtf8(entry.user_id.lname),
                 date: moment(entry.updatedAt).format('DD.MM.YYYY.')
             })
         });

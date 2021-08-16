@@ -64,7 +64,7 @@ async function submit(req, res) {
           let item = `Proizvod fali na stanju:\n\n${warehouseName}\n${cityName}\n${locationName}\n\n${productName}\n${categoryName}\n${subcategoryName}\n${packagingName}\n\n${quantityName}\n${minimumQuantityName}\n`;
           newNotificationLog.data = item;
           await newNotificationLog.save();
-          
+
           let data = {
             warehouse: currentStock.warehouse_id.name,
             city: location.city_id.name,
@@ -83,9 +83,9 @@ async function submit(req, res) {
       await submittedReciept.save();
       await currentStock.save();
 
-      return res.status(200).json({ status: "Uspješno potvrđen unos!" });
+      return res.status(200).json({ status: "Uspješno potvrđeno preuzimanje!" });
     } else {
-      return res.status(404).json({ error: "Unos neispravan provjerite stanje!" });
+      return res.status(404).json({ error: "Proizvod se ne nalazi u odabranom skladištu!" });
     }
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });

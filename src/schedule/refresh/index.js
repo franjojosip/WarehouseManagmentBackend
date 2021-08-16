@@ -265,9 +265,9 @@ function generatePdf(title, docTitle, data) {
   data.forEach((warehouse, i) => {
     head = [
       [
-        { content: 'Naziv skladista: ' + warehouse.warehouse_name, colSpan: 2, styles: { halign: 'center', fillColor: [20, 151, 124] } },
-        { content: 'Lokacija: ' + warehouse.location_name, colSpan: 2, styles: { halign: 'center', fillColor: [20, 151, 124] } },
-        { content: 'Grad: ' + warehouse.city_name, colSpan: 2, styles: { halign: 'center', fillColor: [20, 151, 124] } }
+        { content: 'Naziv skladista: ' + replaceUtf8(warehouse.warehouse_name), colSpan: 2, styles: { halign: 'center', fillColor: [20, 151, 124] } },
+        { content: 'Lokacija: ' + replaceUtf8(warehouse.location_name), colSpan: 2, styles: { halign: 'center', fillColor: [20, 151, 124] } },
+        { content: 'Grad: ' + replaceUtf8(warehouse.city_name), colSpan: 2, styles: { halign: 'center', fillColor: [20, 151, 124] } }
       ],
       [
         { content: 'Proizvod', colSpan: 1, styles: { halign: 'center' } },
@@ -281,10 +281,10 @@ function generatePdf(title, docTitle, data) {
     tableRows = [];
     warehouse.data.forEach(item => {
       const itemData = [
-        item.product_name,
-        item.category_name,
-        item.subcategory_name,
-        item.packaging_name,
+        replaceUtf8(item.product_name),
+        replaceUtf8(item.category_name),
+        replaceUtf8(item.subcategory_name),
+        replaceUtf8(item.packaging_name),
         item.quantity,
         item.minimum_quantity,
       ];
