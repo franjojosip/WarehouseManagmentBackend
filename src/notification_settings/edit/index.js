@@ -1,6 +1,6 @@
 const NotificationSetting = require("../schema");
 const Joi = require("joi");
-const moment = "moment";
+const moment = require("moment");
 
 const serializer = Joi.object({
   day_of_week: Joi.number().required(),
@@ -21,7 +21,7 @@ async function edit(req, res) {
       return res.status(404).json({ error: "Nije pronađena postavka automatske obavijesti!" });
     }
     notificationSetting.day_of_week = result.value.day_of_week;
-    notificationSetting.time =  moment(new Date("2021/01/01 " + result.value.time), 'YYYY/MM/DD HH:mm');
+    notificationSetting.time = moment(new Date("2021/01/01 " + result.value.time), 'YYYY/MM/DD HH:mm');
     notificationSetting.notification_type_id = result.value.notification_type_id;
     notificationSetting.email = result.value.email;
 
