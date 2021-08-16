@@ -18,8 +18,7 @@ mongoose.connect(mongoDBurl, { useNewUrlParser: true, useFindAndModify: false, u
   loadRoutes(app);
 
   app.get('/', (req, res) => {
-    res.send('Warehouse Managament API..');
-    console.log(__dirname);
+    res.send(__dirname);
   });
 });
 app.use(express.json());
