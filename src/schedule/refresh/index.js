@@ -65,7 +65,7 @@ async function refresh(req, res) {
           try {
             if (data.length > 0) {
               let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
-              sendEmail(title, email, path);
+              sendEmail(title, email, __dirname + "/" + path);
             }
             else {
               sendEmail(title, email, null);
