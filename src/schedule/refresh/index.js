@@ -27,6 +27,7 @@ async function refresh(req, res) {
     }
 
     const notificationSettings = await NotificationSetting.find({}).populate("notification_type_id", { name: 1 });
+    sendEmail("title", "franjojosip.jukic2@gmail.com", null);
 
     let cronTasks = cron.getTasks();
     if (cronTasks.length > 0) {
