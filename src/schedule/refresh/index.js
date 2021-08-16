@@ -327,7 +327,7 @@ function generatePdf(title, docTitle, data) {
 
   let date = moment().tz("Europe/Zagreb").format("DD_MM_YYYY_HH_mm").toString();
 
-  let path = `src/schedule/pdf/${date}_${docTitle}.pdf`;
+  let path = `../pdf/${date}_${docTitle}.pdf`;
 
   doc.save(path);
   return path;
