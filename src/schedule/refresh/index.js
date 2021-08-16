@@ -62,6 +62,7 @@ async function refresh(req, res) {
           let title = `Dnevni izvještaj ${date}`;
 
           let data = await getPdfData();
+          sendEmail(moment().tz("Europe/Zagreb").format("DD_MM_YYYY_HH_mm").toString(), email)
           if (data.length > 0) {
             let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
             sendEmail(title, email, path);
@@ -218,7 +219,7 @@ function sendEmail(title, email, path) {
     if (error) {
       console.log(error);
     }
-    if(path){
+    if (path) {
       fs.unlink(path, function (err) {
         if (err) console.log(err);
       });
