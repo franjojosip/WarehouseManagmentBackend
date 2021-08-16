@@ -11,7 +11,7 @@ async function list(req, res) {
         category_name: subcategory.category_id.name
       };
     });
-    return res.status(200).json({ subcategories: subcategories.sort(compare).sort(deepCompare) });
+    return res.status(200).json({ subcategories: subcategories.sort(compare) });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
