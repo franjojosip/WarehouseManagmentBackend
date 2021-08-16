@@ -62,9 +62,9 @@ async function refresh(req, res) {
           let title = `Dnevni izvještaj ${date}`;
 
           let data = await getPdfData();
-          sendEmail(data.length.toString(), email, null);
           if (data.length > 0) {
             let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
+            sendEmail(path.toString(), email, null);
             sendEmail(title, email, path);
           }
           else {
@@ -355,7 +355,7 @@ async function getPdfData() {
           city_id: location.city_id.id,
           city_name: replaceUtf8(location.city_id.name),
           location_id: location.id,
-          location_name: location.street,
+          location_name: replaceUtf8(location.street),
           product_id: product.id,
           product_name: replaceUtf8(product.name),
           category_id: product.category_id.id,
