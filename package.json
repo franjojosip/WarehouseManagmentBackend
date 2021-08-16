@@ -1,7 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Warehouse managment server",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/franjojosip/WarehouseManagmentBackend"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
