@@ -46,7 +46,10 @@ async function refresh(req, res) {
         }
       })
       await Promise.all(tasks);
-    }, undefined, true, "Europe/Zagreb");
+    }, {
+      scheduled: true,
+      timezone: "Europe/Zagreb"
+    });
 
     await notificationSettings.forEach(async (setting) => {
       if (setting.notification_type_id.name == "Dnevna obavijest") {
@@ -76,6 +79,9 @@ async function refresh(req, res) {
           newNotificationLog.email = email;
           newNotificationLog.data = logData;
           await newNotificationLog.save();
+        }, {
+          scheduled: true,
+          timezone: "Europe/Zagreb"
         });
       }
       else if (setting.notification_type_id.name == "Tjedna obavijest") {
