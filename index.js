@@ -23,7 +23,7 @@ mongoose.connect(mongoDBurl, { useNewUrlParser: true, useFindAndModify: false, u
 });
 app.use(express.json());
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8000
 app.listen(port);
 
 module.exports = app;
