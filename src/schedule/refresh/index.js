@@ -46,7 +46,7 @@ async function refresh(req, res) {
         }
       })
       await Promise.all(tasks);
-    });
+    }, undefined, true, "Europe/Zagreb");
 
     await notificationSettings.forEach(async (setting) => {
       if (setting.notification_type_id.name == "Dnevna obavijest") {
