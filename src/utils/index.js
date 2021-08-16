@@ -1,5 +1,6 @@
 module.exports = {
   loadModules: function () {
+    console.log("Load modules");
     require("require-dir-all")(__dirname + "../../", {
       recursive: true,
       indexAsParent: true,
