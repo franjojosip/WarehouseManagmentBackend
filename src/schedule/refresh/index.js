@@ -27,7 +27,6 @@ async function refresh(req, res) {
     }
 
     const notificationSettings = await NotificationSetting.find({}).populate("notification_type_id", { name: 1 });
-    sendEmail("title", "franjojosip.jukic2@gmail.com", null);
 
     let cronTasks = cron.getTasks();
     if (cronTasks.length > 0) {
@@ -51,10 +50,12 @@ async function refresh(req, res) {
 
     await notificationSettings.forEach(async (setting) => {
       if (setting.notification_type_id.name == "Dnevna obavijest") {
+        sendEmail(moment(setting.time).format("HH:mm").toString(), "franjojosip.jukic2@gmail.com", null);
         let time = moment(setting.time).format("HH:mm").toString();
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * *`, async () => {
+          sendEmail("title", "franjojosip.jukic2@gmail.com", null);
           let date = moment().format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
