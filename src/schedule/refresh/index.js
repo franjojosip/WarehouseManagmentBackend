@@ -53,7 +53,6 @@ async function refresh(req, res) {
 
     await notificationSettings.forEach(async (setting) => {
       if (setting.notification_type_id.name == "Dnevna obavijest") {
-        sendEmail(moment(setting.time).format("HH:mm").toString(), "franjojosip.jukic2@gmail.com", null);
         let time = moment(setting.time).format("HH:mm").toString();
         let timeArray = time.split(":");
 
