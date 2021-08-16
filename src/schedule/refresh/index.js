@@ -60,8 +60,6 @@ async function refresh(req, res) {
           let date = moment().format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
-          sendEmail(title, email, null);
-          sendEmail(title, email, null);
 
           let data = await getPdfData();
           if (data.length > 0) {
@@ -375,6 +373,9 @@ async function getPdfData() {
   });
   if (reportStocks.length > 0) {
     reportStocks = reportStocks.sort(compareCategories).sort(deepCompareProducts)
+  }
+  else {
+    return [];
   }
   let grouppedReportReciepts = [];
 
