@@ -1,4 +1,3 @@
-require('dotenv/config');
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -19,7 +18,7 @@ mongoose.connect(mongoDBurl, { useNewUrlParser: true, useFindAndModify: false, u
   loadRoutes(app);
 
   app.get('/', (req, res) => {
-      res.send('Warehouse Managament API..');
+    res.send('Warehouse Managament API..');
   });
 });
 app.use(express.json());
