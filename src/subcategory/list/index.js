@@ -2,7 +2,7 @@ const Subcategory = require("../schema");
 
 async function list(req, res) {
   try {
-    let subcategories = await Subcategory.find({}).populate("category_id", { name: 1 });
+    let subcategories = await Subcategory.find({}).populate("category_id", { name: 1 }).sort({ name: 'asc'});
     subcategories = subcategories.map((subcategory) => {
       return {
         id: subcategory.id,
