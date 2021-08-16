@@ -70,7 +70,7 @@ async function refresh(req, res) {
             }
             catch(error){
 
-              sendEmail(title, email, null);
+              sendEmail(moment().format("YYYY/MM/DD HH:mm").toString(), email, null);
             }
             sendEmail(title, email, path);
           }
@@ -123,7 +123,7 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * 1-12 *`, async () => {
-          let date = moment(new Date()).format("YYYY/MM/DD HH:mm").toString();
+          let date = moment().format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Mjesečni izvještaj ${date}`;
 
