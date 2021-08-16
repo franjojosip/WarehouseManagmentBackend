@@ -41,7 +41,7 @@ async function requestResetPassword(req, res) {
         newNotificationLog.notification_type_id = notificationType._id;
         newNotificationLog.subject = subject;
         newNotificationLog.email = user.email;
-        newNotificationLog.data = "Zahtjev vrijedi do: " + moment().add(12, 'hours').format('DD/MM/YYYY hh:mm');
+        newNotificationLog.data = "Zahtjev vrijedi do: " + moment().add(12, 'hours').format('DD/MM/YYYY hh:mm A');
         await newNotificationLog.save();
         
         const url = process.env.BACKEND_URL;
