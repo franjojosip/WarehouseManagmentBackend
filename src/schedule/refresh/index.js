@@ -218,9 +218,11 @@ function sendEmail(title, email, path) {
     if (error) {
       console.log(error);
     }
-    fs.unlink(path, function (err) {
-      if (err) console.log(err);
-    });
+    if(path){
+      fs.unlink(path, function (err) {
+        if (err) console.log(err);
+      });
+    }
   });
 }
 
