@@ -63,15 +63,7 @@ async function refresh(req, res) {
 
           let data = await getPdfData();
           if (data.length > 0) {
-            try{
-              let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
-              sendEmail(path.toString(), email, null);
-              sendEmail(title, email, path);
-            }
-            catch(error){
-
-              sendEmail(moment().utc().format("YYYY/MM/DD HH:mm").toString(), email, null);
-            }
+            let path = generatePdf("Dnevni izvještaj", "dnevni_izvjestaj", data);
             sendEmail(title, email, path);
           }
           else {
@@ -123,7 +115,7 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * 1-12 *`, async () => {
-          let date = moment().format("YYYY/MM/DD HH:mm").toString();
+          let date = moment(new Date()).format("YYYY/MM/DD HH:mm").toString();
           let email = setting.email;
           let title = `Mjesečni izvještaj ${date}`;
 
@@ -328,7 +320,7 @@ function generatePdf(title, docTitle, data) {
     });
   });
 
-  let date = moment(new Date()).format("DD_MM_YYYY_HH_mm").toString();
+  let date = moment().add(2, "hours").format("DD_MM_YYYY_HH_mm").toString();
 
   let path = `src/schedule/pdf/${date}_${docTitle}.pdf`;
 
