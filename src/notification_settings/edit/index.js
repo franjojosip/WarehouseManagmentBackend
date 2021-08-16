@@ -22,7 +22,7 @@ async function edit(req, res) {
     }
     let time = "2021/01/01 " + result.value.time;
     notificationSetting.day_of_week = result.value.day_of_week;
-    notificationSetting.time = time;
+    notificationSetting.time =  moment(time, "Europe/Vienna");
     notificationSetting.notification_type_id = result.value.notification_type_id;
     notificationSetting.email = result.value.email;
 
