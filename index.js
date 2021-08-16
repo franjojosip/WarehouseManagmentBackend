@@ -1,13 +1,11 @@
+require('dotenv/config');
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require('mongoose');
-const logger = require("morgan");
 const { loadModules, loadRoutes } = require('./src/utils/index');
 
-app.use(logger("dev"));
 app.use(cors());
-app.use(express.json());
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -24,6 +22,7 @@ mongoose.connect(mongoDBurl, { useNewUrlParser: true, useFindAndModify: false, u
       res.send('Warehouse Managament API..');
   });
 });
+app.use(express.json());
 
 const port = process.env.PORT || 8000;
 app.listen(port);
