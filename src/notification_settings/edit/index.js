@@ -20,9 +20,8 @@ async function edit(req, res) {
     if (!notificationSetting) {
       return res.status(404).json({ error: "Nije pronađena postavka automatske obavijesti!" });
     }
-    let time = "2021/01/01 " + result.value.time;
     notificationSetting.day_of_week = result.value.day_of_week;
-    notificationSetting.time =  moment(time, "Europe/Vienna");
+    notificationSetting.time =  moment(new Date("2021/01/01 " + result.value.time), 'YYYY/MM/DD HH:mm');
     notificationSetting.notification_type_id = result.value.notification_type_id;
     notificationSetting.email = result.value.email;
 

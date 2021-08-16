@@ -15,10 +15,10 @@ async function add(req, res) {
     if (result.error) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
-    let time = moment("2021/01/01 " + result.value.time, 'YYYY/MM/DD HH:mm');
+    
     const newNotificationSetting = new NotificationSetting();
     newNotificationSetting.day_of_week = result.value.day_of_week;
-    newNotificationSetting.time = moment(time);
+    newNotificationSetting.time = moment(new Date("2021/01/01 " + result.value.time), 'YYYY/MM/DD HH:mm');
     newNotificationSetting.notification_type_id = result.value.notification_type_id;
     newNotificationSetting.email = result.value.email;
 
