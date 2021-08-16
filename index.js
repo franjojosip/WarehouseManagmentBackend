@@ -19,6 +19,7 @@ mongoose.connect(mongoDBurl, { useNewUrlParser: true, useFindAndModify: false, u
 
   app.get('/', (req, res) => {
     res.send('Warehouse Managament API..');
+    console.log(__dirname);
   });
 });
 app.use(express.json());
