@@ -252,7 +252,7 @@ function generatePdf(title, docTitle, data) {
   doc.line(130, 36, 200, 36);
 
   //Url
-  doc.text("upravljanjeprojektima.vercel.app", 136, 42);
+  doc.text("upravljanjeskladistima.vercel.app", 136, 42);
 
   //Prijelom linija
   doc.setLineWidth(1.1);
