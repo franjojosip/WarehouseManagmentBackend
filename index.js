@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require('mongoose');
-const { loadModules, loadRoutes } = require('./src/utils/index');
+const { loadModules, loadRoutes } = require(__dirname + '/src/utils/index');
 
 app.use(cors());
 
@@ -18,7 +18,7 @@ mongoose.connect(mongoDBurl, { useNewUrlParser: true, useFindAndModify: false, u
   loadRoutes(app);
 
   app.get('/', (req, res) => {
-    res.send(__dirname);
+    res.send('Warehouse Managment API');
   });
 });
 app.use(express.json());
