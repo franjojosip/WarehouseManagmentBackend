@@ -18,7 +18,7 @@ async function add(req, res) {
     
     const newNotificationSetting = new NotificationSetting();
     newNotificationSetting.day_of_week = result.value.day_of_week;
-    newNotificationSetting.time = moment(new Date("2021/01/01 " + result.value.time), 'YYYY/MM/DD HH:mm');
+    newNotificationSetting.time = moment(new Date("2021/01/01 " + result.value.time), 'DD/MM/YYYY HH:mm');
     newNotificationSetting.notification_type_id = result.value.notification_type_id;
     newNotificationSetting.email = result.value.email;
 
