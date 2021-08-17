@@ -8,7 +8,7 @@ async function list(req, res) {
       return {
         id: notificationSetting.id,
         day_of_week: notificationSetting.day_of_week,
-        time: moment(notificationSetting.time).format('YYYY/MM/DD HH:mm'),
+        time: moment(notificationSetting.time).format('DD/MM/YYYY'),
         notification_type_id: notificationSetting.notification_type_id.id,
         notification_type_name: notificationSetting.notification_type_id.name,
         email: notificationSetting.email,

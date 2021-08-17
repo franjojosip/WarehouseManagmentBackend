@@ -39,7 +39,7 @@ async function refresh(req, res) {
       var forgotPasswordEmails = await PasswordRequest.find({ isUsed: false });
       let tasks = [];
       forgotPasswordEmails.forEach(request => {
-        if (moment().diff(moment(request.createdAt, "YYYY/MM/DD HH:mm"), 'hours') > 12) {
+        if (moment().diff(moment(request.createdAt, "DD/MM/YYYY HH:mm"), 'hours') > 12) {
           tasks.push(PasswordRequest.findByIdAndUpdate(request._id, {
             isUsed: true,
           }));
@@ -57,7 +57,7 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * *`, async () => {
-          let date = moment().tz("Europe/Zagreb").format("YYYY/MM/DD HH:mm").toString();
+          let date = moment().tz("Europe/Zagreb").format("DD/MM/YYYY HH:mm").toString();
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
 
@@ -88,7 +88,7 @@ async function refresh(req, res) {
         let day_of_week = setting.day_of_week;
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * ${day_of_week}`, async () => {
-          let date = moment().tz("Europe/Zagreb").format("YYYY/MM/DD HH:mm").toString();
+          let date = moment().tz("Europe/Zagreb").format("DD/MM/YYYY HH:mm").toString();
           let email = setting.email;
           let title = `Tjedni izvještaj ${date}`;
 
@@ -115,7 +115,7 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * 1-12 *`, async () => {
-          let date = moment().tz("Europe/Zagreb").format("YYYY/MM/DD HH:mm").toString();
+          let date = moment().tz("Europe/Zagreb").format("DD/MM/YYYY HH:mm").toString();
           let email = setting.email;
           let title = `Mjesečni izvještaj ${date}`;
 
