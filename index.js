@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const mongoose = require('mongoose');
 const { loadModules, loadRoutes } = require('./src/utils/index');
-const { wakeDyno } = require('heroku-keep-awake');
+const { AwakeHeroku } = require("awake-heroku");
 
 app.use(cors());
 
@@ -25,8 +25,9 @@ mongoose.connect(mongoDBurl, { useNewUrlParser: true, useFindAndModify: false, u
 app.use(express.json());
 
 const port = process.env.PORT || 8000;
-app.listen(port, () => {
-    wakeDyno("https://upravljanjeskladistimaserver.herokuapp.com/");
-})
+app.listen(port);
+
+AwakeHeroku.add("https://upravljanjeskladistimaserver.herokuapp.com");
+AwakeHeroku.start();
 
 module.exports = app;
