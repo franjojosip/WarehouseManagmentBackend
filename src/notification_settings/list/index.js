@@ -15,10 +15,20 @@ async function list(req, res) {
       };
     });
 
-    return res.status(200).json({ notificationSettings });
+    return res.status(200).json({ notificationSettings: notificationSettings.sort(compare) });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
+}
+
+function compare(a, b) {
+    if (a.notification_type_name[0] < b.notification_type_name[0]) {
+        return -1;
+    }
+    if (a.notification_type_name[0] > b.notification_type_name[0]) {
+        return 1;
+    }
+    return 0;
 }
 
 module.exports = list;
