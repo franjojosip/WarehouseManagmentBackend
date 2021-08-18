@@ -3,7 +3,6 @@ const app = express();
 const cors = require("cors");
 const mongoose = require('mongoose');
 const { loadModules, loadRoutes } = require('./src/utils/index');
-const { AwakeHeroku } = require("awake-heroku");
 
 app.use(cors());
 
@@ -26,8 +25,5 @@ app.use(express.json());
 
 const port = process.env.PORT || 8000;
 app.listen(port);
-
-AwakeHeroku.add("https://upravljanjeskladistimaserver.herokuapp.com");
-AwakeHeroku.start();
 
 module.exports = app;
