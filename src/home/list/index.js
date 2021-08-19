@@ -27,9 +27,7 @@ async function list(req, res) {
     let users = await User.find({});
     let loggedUser = await User.find({ _id: req.body.userId }).populate("role_id", { name: 1 });;
 
-    console.log(loggedUser);
-    if (loggedUser.role_id.name.toLowerCase() !== "administrator") {
-      console.log(loggedUser);
+    if (loggedUser.role_id.name.toLowerCase() == "korisnik") {
       reciepts = reciepts.filter(reciept => reciept.user_id == loggedUser._id)
       stocktakings = stocktakings.filter(stocktaking => stocktaking.user_id == loggedUser._id)
       entries = entries.filter(entry => entry.user_id == loggedUser._id)
@@ -44,6 +42,7 @@ async function list(req, res) {
       }
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
 }
