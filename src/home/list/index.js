@@ -35,12 +35,13 @@ async function list(req, res) {
 
 
     if (loggedUser.role_id.name.toLowerCase() == "korisnik") {
-      total_reciepts = reciepts.filter(reciept => reciept.user_id == loggedUser._id).length;
-      total_stocktakings = stocktakings.filter(stocktaking => stocktaking.user_id == loggedUser._id).length;
-      console.log(loggedUser.id);
-      console.log(loggedUser._id);
-      console.log(entries.filter(entry => entry.user_id == loggedUser._id));
-      total_entries = entries.filter(entry => entry.user_id == loggedUser._id).length;
+      total_reciepts = 0;
+      total_stocktakings = 0;
+      total_entries = 0;
+
+      reciepts.forEach(reciept => { if (reciept.user_id == loggedUser.id) total_reciepts++; });
+      stocktakings.forEach(stocktaking => { if (stocktaking.user_id == loggedUser.id) total_stocktakings++; });
+      entries.forEach(entry => { if (entry.user_id == loggedUser.id) total_entries++; });
     }
 
     return res.status(200).json({
