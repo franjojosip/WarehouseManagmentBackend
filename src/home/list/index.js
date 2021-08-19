@@ -37,7 +37,9 @@ async function list(req, res) {
     if (loggedUser.role_id.name.toLowerCase() == "korisnik") {
       total_reciepts = reciepts.filter(reciept => reciept.user_id == loggedUser._id).length;
       total_stocktakings = stocktakings.filter(stocktaking => stocktaking.user_id == loggedUser._id).length;
-      console.log(entries);
+      console.log(loggedUser.id);
+      console.log(loggedUser._id);
+      console.log(entries.filter(entry => entry.user_id == loggedUser._id));
       total_entries = entries.filter(entry => entry.user_id == loggedUser._id).length;
     }
 
