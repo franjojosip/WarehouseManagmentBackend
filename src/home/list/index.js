@@ -12,7 +12,7 @@ async function list(req, res) {
         $lte: new Date(moment().endOf('month').toDate())
       }
     });
-    console.log(reciepts.length);
+    console.log(reciepts);
     let stocktakings = await Stocktaking.find({
       createdAt: {
         $gte: new Date(moment().startOf('month').toDate()),
