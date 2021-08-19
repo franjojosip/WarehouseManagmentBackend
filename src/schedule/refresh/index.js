@@ -114,7 +114,7 @@ async function refresh(req, res) {
         let time = moment(setting.time).format("HH:mm").toString();
         let timeArray = time.split(":");
 
-        await cron.schedule(`${timeArray[1]} ${timeArray[0]} * 1-12 *`, async () => {
+        await cron.schedule(`${timeArray[1]} ${timeArray[0]} 1 1-12 *`, async () => {
           let date = moment().tz("Europe/Zagreb").format("DD/MM/YYYY HH:mm").toString();
           let email = setting.email;
           let title = `Mjesečni izvještaj ${date}`;
