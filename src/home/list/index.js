@@ -20,14 +20,16 @@ async function list(req, res) {
     });
     let entries = await Entry.find({
       createdAt: {
-        $gte:  new Date(moment().startOf('month').toDate()),
+        $gte: new Date(moment().startOf('month').toDate()),
         $lte: new Date(moment().endOf('month').toDate())
       }
     });
     let users = await User.find({});
-    let loggedUser = await User.findById(req.body.userId).populate("role_id", { name: 1 });
+    let loggedUser = await User.find({ _id: req.body.userId }).populate("role_id", { name: 1 });;
 
+    console.log(loggedUser);
     if (loggedUser.role_id.name.toLowerCase() !== "administrator") {
+      console.log(loggedUser);
       reciepts = reciepts.filter(reciept => reciept.user_id == loggedUser._id)
       stocktakings = stocktakings.filter(stocktaking => stocktaking.user_id == loggedUser._id)
       entries = entries.filter(entry => entry.user_id == loggedUser._id)
