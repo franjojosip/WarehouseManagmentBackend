@@ -8,20 +8,20 @@ async function list(req, res) {
   try {
     let reciepts = await Reciept.find({
       createdAt: {
-        $gte: moment().startOf('month').toDate(),
-        $lte: moment().endOf('month').toDate()
+        $gte: new Date(moment().startOf('month').toDate()),
+        $lte: new Date(moment().endOf('month').toDate())
       }
     });
     let stocktakings = await Stocktaking.find({
       createdAt: {
-        $gte: moment().startOf('month').toDate(),
-        $lte: moment().endOf('month').toDate()
+        $gte: new Date(moment().startOf('month').toDate()),
+        $lte: new Date(moment().endOf('month').toDate())
       }
     });
     let entries = await Entry.find({
       createdAt: {
-        $gte: moment().startOf('month').toDate(),
-        $lte: moment().endOf('month').toDate()
+        $gte:  new Date(moment().startOf('month').toDate()),
+        $lte: new Date(moment().endOf('month').toDate())
       }
     });
     let users = await User.find({});
