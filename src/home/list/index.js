@@ -12,20 +12,23 @@ async function list(req, res) {
         $lte: new Date(moment().endOf('month').toDate())
       }
     });
+    console.log(reciepts.length);
     let stocktakings = await Stocktaking.find({
       createdAt: {
         $gte: new Date(moment().startOf('month').toDate()),
         $lte: new Date(moment().endOf('month').toDate())
       }
     });
+    console.log(stocktakings.length);
     let entries = await Entry.find({
       createdAt: {
         $gte: new Date(moment().startOf('month').toDate()),
         $lte: new Date(moment().endOf('month').toDate())
       }
     });
+    console.log(entries.length);
     let users = await User.find({});
-    let loggedUser = await User.find({ _id: req.body.userId }).populate("role_id", { name: 1 });;
+    let loggedUser = await User.findOne({ _id: req.body.userId }).populate("role_id", { name: 1 });;
 
     if (loggedUser.role_id.name.toLowerCase() == "korisnik") {
       reciepts = reciepts.filter(reciept => reciept.user_id == loggedUser._id)
