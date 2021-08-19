@@ -12,36 +12,40 @@ async function list(req, res) {
         $lte: new Date(moment().endOf('month').toDate())
       }
     });
-    console.log(reciepts);
     let stocktakings = await Stocktaking.find({
       createdAt: {
         $gte: new Date(moment().startOf('month').toDate()),
         $lte: new Date(moment().endOf('month').toDate())
       }
     });
-    console.log(stocktakings.length);
     let entries = await Entry.find({
       createdAt: {
         $gte: new Date(moment().startOf('month').toDate()),
         $lte: new Date(moment().endOf('month').toDate())
       }
     });
-    console.log(entries.length);
     let users = await User.find({});
-    let loggedUser = await User.findOne({ _id: req.body.userId }).populate("role_id", { name: 1 });;
+
+    let loggedUser = await User.findOne({ _id: req.body.userId }).populate("role_id", { name: 1 });
+
+    let total_reciepts = reciepts.length;
+    let total_stocktakings = stocktakings.length;
+    let total_entries = entries.length;
+    let total_users = users.length;
+
 
     if (loggedUser.role_id.name.toLowerCase() == "korisnik") {
-      reciepts = reciepts.filter(reciept => reciept.user_id == loggedUser._id)
-      stocktakings = stocktakings.filter(stocktaking => stocktaking.user_id == loggedUser._id)
-      entries = entries.filter(entry => entry.user_id == loggedUser._id)
+      total_reciepts = reciepts.filter(reciept => reciept.user_id == loggedUser._id).length;
+      stocktakings = stocktakings.filter(stocktaking => stocktaking.user_id == loggedUser._id).length;
+      entries = entries.filter(entry => entry.user_id == loggedUser._id).length;
     }
 
     return res.status(200).json({
       data: {
-        total_reciepts: reciepts.length,
-        total_stocktakings: stocktakings.length,
-        total_entries: entries.length,
-        total_users: users.length,
+        total_reciepts,
+        total_stocktakings,
+        total_entries,
+        total_users,
       }
     });
   } catch (err) {
