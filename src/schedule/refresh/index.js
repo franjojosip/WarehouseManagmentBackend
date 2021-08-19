@@ -55,11 +55,14 @@ async function refresh(req, res) {
       if (setting.notification_type_id.name == "Dnevna obavijest") {
         let time = moment(setting.time).format("HH:mm").toString();
         let timeArray = time.split(":");
+        console.log("Postavljena dnevna obavijest: " + `${timeArray[1]} ${timeArray[0]} * * *`);
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * *`, async () => {
           let date = moment().tz("Europe/Zagreb").format("DD/MM/YYYY HH:mm").toString();
           let email = setting.email;
           let title = `Dnevni izvještaj ${date}`;
+
+          console.log(title);
 
           let data = await getPdfData();
           if (data.length > 0) {
@@ -87,10 +90,13 @@ async function refresh(req, res) {
         let timeArray = time.split(":");
         let day_of_week = setting.day_of_week;
 
+        console.log("Postavljena tjedna obavijest: " + `${timeArray[1]} ${timeArray[0]} * * ${day_of_week}`);
+
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} * * ${day_of_week}`, async () => {
           let date = moment().tz("Europe/Zagreb").format("DD/MM/YYYY HH:mm").toString();
           let email = setting.email;
           let title = `Tjedni izvještaj ${date}`;
+          console.log(title);
 
           let data = await getPdfData();
           if (data.length > 0) {
@@ -113,11 +119,13 @@ async function refresh(req, res) {
       else if (setting.notification_type_id.name == "Mjesečna obavijest") {
         let time = moment(setting.time).format("HH:mm").toString();
         let timeArray = time.split(":");
+        console.log("Postavljena mjesečna obavijest: " + `${timeArray[1]} ${timeArray[0]} 1 1-12 *`);
 
         await cron.schedule(`${timeArray[1]} ${timeArray[0]} 1 1-12 *`, async () => {
           let date = moment().tz("Europe/Zagreb").format("DD/MM/YYYY HH:mm").toString();
           let email = setting.email;
           let title = `Mjesečni izvještaj ${date}`;
+          console.log(title);
 
           let data = await getPdfData();
           if (data.length > 0) {
