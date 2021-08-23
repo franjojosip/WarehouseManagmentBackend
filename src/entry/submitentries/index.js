@@ -18,7 +18,7 @@ async function submitEntries(req, res) {
 
 
     await Promise.all(result.value.entry_ids.map(async (id) => {
-      return new Promise(resolve => {
+      return new Promise(async (resolve) => {
         const submittedEntry = await Entry.findById(id);
         const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
@@ -37,7 +37,7 @@ async function submitEntries(req, res) {
           console.log("not");
           isError = true;
         }
-        resolve();
+        resolve(true);
       });
     }));
     console.log("iserror");
