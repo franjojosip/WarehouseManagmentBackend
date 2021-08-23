@@ -47,6 +47,7 @@ async function list(req, res) {
         user_id: stocktaking.user_id.id,
         user_name: stocktaking.user_id.fname + " " + stocktaking.user_id.fname,
         quantity: stocktaking.counted_quantity,
+        real_quantity: stocktaking.real_quantity,
         date_created: stocktaking.createdAt,
         isSubmitted: stocktaking.isSubmitted
       };
