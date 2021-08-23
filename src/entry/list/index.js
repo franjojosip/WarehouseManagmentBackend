@@ -3,6 +3,7 @@ const Location = require("../../location/schema");
 const Product = require("../../product/schema");
 const Warehouse = require("../../warehouse/schema");
 const User = require("../../users/schema");
+const Stock = require("../../stock/schema");
 
 async function list(req, res) {
   try {
@@ -20,11 +21,13 @@ async function list(req, res) {
     }
     let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
     let locations = await Location.find({}).populate("city_id", { name: 1 });
+    let stocks = await Stock.find({});
 
     entries = entries.map((entry) => {
 
       let product = products.find(product => product.id == entry.product_id.id);
       let location = locations.find(location => location.id == entry.warehouse_id.location_id);
+      let stock = stocks.find(stock => stock.warehouse_id == entry.warehouse_id.id && stock.product_id == entry.product_id.id);
 
       return {
         id: entry.id,
@@ -44,7 +47,9 @@ async function list(req, res) {
         packaging_name: product.packaging_id ? product.packaging_id.name : "",
         user_id: entry.user_id.id,
         user_name: entry.user_id.fname + " " + entry.user_id.lname,
+        old_quantity: entry.old_quantity ? entry.old_quantity : stock.quantity,
         quantity: entry.quantity,
+        new_quantity: entry.old_quantity ? entry.old_quantity + entry.quantity : stock.quantity + entry.quantity,
         date_created: entry.createdAt,
         isSubmitted: entry.isSubmitted
       };
