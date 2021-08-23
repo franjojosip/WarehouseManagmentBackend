@@ -9,7 +9,7 @@ const add = require("./add/index");
 const remove = require("./remove/index");
 const edit = require("./edit/index");
 const submit = require("./submit/index");
-const submitAll = require("./submit-all/index");
+const submitAll = require("./submitAll/index");
 const report = require("./report/index");
 
 router.post("/", authenticateJWT, list);
@@ -18,6 +18,6 @@ router.post("/add", authenticateJWT, add);
 router.delete("/remove/:id", checkParamID, authenticateJWT, remove);
 router.patch("/:id", checkParamID, authenticateJWT, edit);
 router.patch("/submit/:id", checkParamID, authenticateJWT, submit);
-router.patch("/submit-all", checkParamID, authenticateJWT, submitAll);
+router.patch("/submitall", checkParamID, authenticateJWT, submitAll);
 
 module.exports = router;
