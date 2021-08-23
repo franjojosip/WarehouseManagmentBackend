@@ -3,6 +3,7 @@ const Stock = require("../../stock/schema");
 const Joi = require("joi");
 
 async function submitAll(req, res) {
+  console.log(req.body);
   try {
     if (!req.body || req.body.length < 1) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
