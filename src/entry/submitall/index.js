@@ -9,6 +9,8 @@ const serializer = Joi.object({
 async function submitAll(req, res) {
   try {
     const result = serializer.validate(req.body);
+    console.log(req.body);
+    console.log(result);
     if (result.error) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
