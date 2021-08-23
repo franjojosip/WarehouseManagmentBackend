@@ -43,6 +43,7 @@ async function list(req, res) {
         packaging_id: product.packaging_id ? product.packaging_id.id : "",
         packaging_name: product.packaging_id ? product.packaging_id.name : "",
         user_id: entry.user_id.id,
+        user_name: entry.user_id.fname + " " + entry.user_id.lname,
         quantity: entry.quantity,
         date_created: entry.createdAt,
         isSubmitted: entry.isSubmitted
