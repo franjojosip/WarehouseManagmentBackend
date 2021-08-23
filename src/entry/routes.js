@@ -9,7 +9,7 @@ const add = require("./add/index");
 const remove = require("./remove/index");
 const edit = require("./edit/index");
 const submit = require("./submit/index");
-const submitAll = require("./submitAll/index");
+const submitAll = require("./submitall/index");
 const report = require("./report/index");
 
 router.post("/", authenticateJWT, list);
