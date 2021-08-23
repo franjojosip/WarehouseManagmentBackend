@@ -1,5 +1,6 @@
 const Entry = require("../schema");
 const Stock = require("../../stock/schema");
+const Joi = require("joi");
 
 const serializer = Joi.object({
   entry_ids: Joi.array().required(),
