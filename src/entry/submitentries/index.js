@@ -16,8 +16,7 @@ async function submitEntries(req, res) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
     let isError = false;
-    await result.value.entry_ids.length.forEach((id) => {
-
+    for (const id of result.value.entry_ids) {
       const submittedEntry = await Entry.findById(id);
       const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
@@ -36,7 +35,7 @@ async function submitEntries(req, res) {
         isError = true;
         console.log("nije");
       }
-    });
+    };
     console.log("isErrorr");
     if (isError) {
       return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
