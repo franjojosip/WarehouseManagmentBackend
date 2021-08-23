@@ -2,20 +2,13 @@ const Entry = require("../schema");
 const Stock = require("../../stock/schema");
 const Joi = require("joi");
 
-const serializer = Joi.object({
-  entry_ids: Joi.array().required()
-});
-
 async function submitAll(req, res) {
   try {
-    const result = serializer.validate(req.body);
-    console.log(req.body);
-    console.log(result);
-    if (result.error) {
+    if (!req.body || req.body.length < 1) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
     let isError = false;
-    await result.value.entry_ids.forEach(async (id) => {
+    await req.body.entry_ids.forEach(async (id) => {
 
       const submittedEntry = await Entry.findById(id);
       const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
