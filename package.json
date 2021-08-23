@@ -13,6 +13,7 @@
   "author": "Franjo Josip Jukić",
   "license": "ISC",
   "dependencies": {
+    "async": "^3.2.1",
     "awake-heroku": "^2.0.8",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
