@@ -31,6 +31,9 @@ async function list(req, res) {
       let location = locations.find(location => location.id == reciept.warehouse_id.location_id);
       let product = products.find(product => product.id == reciept.product_id.id);
       let stock = stocks.find(stock => stock.warehouse_id == reciept.warehouse_id.id && stock.product_id == reciept.product_id.id);
+      if (stock == null) {
+        stock = { quantity: 0 };
+      }
 
       return {
         id: reciept.id,
