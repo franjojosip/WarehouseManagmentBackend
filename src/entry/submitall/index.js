@@ -3,7 +3,7 @@ const Stock = require("../../stock/schema");
 const Joi = require("joi");
 
 const serializer = Joi.object({
-  entry_ids: Joi.array().required(),
+  entry_ids: Joi.array().required()
 });
 
 async function submitAll(req, res) {
