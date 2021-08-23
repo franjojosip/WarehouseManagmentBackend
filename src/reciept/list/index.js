@@ -55,7 +55,7 @@ async function list(req, res) {
         user_name: reciept.user_id.fname + " " + reciept.user_id.fname,
         old_quantity: reciept.old_quantity ? reciept.old_quantity : stock.quantity,
         quantity: reciept.quantity,
-        new_quantity: reciept.old_quantity ? reciept.old_quantity + reciept.quantity : stock.quantity + reciept.quantity,
+        new_quantity: reciept.old_quantity ? reciept.old_quantity - reciept.quantity : stock.quantity - reciept.quantity,
         date_created: reciept.createdAt,
         isSubmitted: reciept.isSubmitted
       };
