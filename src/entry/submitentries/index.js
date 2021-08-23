@@ -2,14 +2,18 @@ const Entry = require("../schema");
 const Stock = require("../../stock/schema");
 const Joi = require("joi");
 
-async function submitAll(req, res) {
-  console.log(req.body);
+const serializer = Joi.object({
+  entry_ids: Joi.array().required()
+});
+
+async function submitEntries(req, res) {
   try {
-    if (!req.body || req.body.length < 1) {
+    const result = serializer.validate(req.body);
+    if (result.error) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
     let isError = false;
-    await req.body.entry_ids.forEach(async (id) => {
+    await result.value.entry_ids.forEach(async (id) => {
 
       const submittedEntry = await Entry.findById(id);
       const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
@@ -35,9 +39,8 @@ async function submitAll(req, res) {
       return res.status(200).json({ status: "Uspješno potvrđeni svi unosi!" });
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
 }
 
-module.exports = submitAll;
+module.exports = submitEntries;
