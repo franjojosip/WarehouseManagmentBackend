@@ -16,7 +16,7 @@ router.post("/", authenticateJWT, list);
 router.post("/report", authenticateJWT, report);
 router.post("/add", authenticateJWT, add);
 router.delete("/remove/:id", checkParamID, authenticateJWT, remove);
-router.post("/submitentries", authenticateJWT, submitEntries);
+router.patch("/submitentries", authenticateJWT, submitEntries);
 router.patch("/:id", checkParamID, authenticateJWT, edit);
 router.patch("/submit/:id", checkParamID, authenticateJWT, submit);
 
