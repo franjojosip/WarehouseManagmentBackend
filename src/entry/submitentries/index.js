@@ -15,24 +15,27 @@ async function submitEntries(req, res) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
     let isError = false;
-    await Promise.all(result.value.entry_ids.forEach(async (id) => {
+    await Promise.all(result.value.entry_ids.map(async (id) => {
+      return async () => {
+        const submittedEntry = await Entry.findById(id);
+        const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
-      const submittedEntry = await Entry.findById(id);
-      const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
+        if (submittedEntry && currentStock) {
+          console.log("submitted");
+          let oldQuantity = currentStock.quantity;
 
-      if (submittedEntry && currentStock) {
-        console.log("submitted");
-        let oldQuantity = currentStock.quantity;
+          submittedEntry.isSubmitted = true;
+          submittedEntry.old_quantity = oldQuantity;
+          currentStock.quantity = oldQuantity + submittedEntry.quantity;
 
-        submittedEntry.isSubmitted = true;
-        submittedEntry.old_quantity = oldQuantity;
-        currentStock.quantity = oldQuantity + submittedEntry.quantity;
+          await submittedEntry.save();
+          await currentStock.save();
+        }
+        else {
+          console.log("not");
+          isError = true;
+        }
 
-        await submittedEntry.save();
-        await currentStock.save();
-      }
-      else {
-        isError = true;
       }
     }));
     console.log("iserror");
