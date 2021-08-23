@@ -18,6 +18,6 @@ router.post("/add", authenticateJWT, add);
 router.delete("/remove/:id", checkParamID, authenticateJWT, remove);
 router.patch("/:id", checkParamID, authenticateJWT, edit);
 router.patch("/submit/:id", checkParamID, authenticateJWT, submit);
-router.patch("/submitall", checkParamID, authenticateJWT, submitAll);
+router.patch("/submitall", authenticateJWT, submitAll);
 
 module.exports = router;
