@@ -16,32 +16,36 @@ async function submitEntries(req, res) {
     }
     let isError = false;
 
-    async.forEach(result.value.entry_ids, function (id, callback) {
-      const submittedEntry = await Entry.findById(id);
-      const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
-      if (submittedEntry && currentStock) {
-        console.log("submitted");
-        let oldQuantity = currentStock.quantity;
+    await Promise.all(result.value.entry_ids.map(async (id) => {
+      return new Promise(resolve => {
+        const submittedEntry = await Entry.findById(id);
+        const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
-        submittedEntry.isSubmitted = true;
-        submittedEntry.old_quantity = oldQuantity;
-        currentStock.quantity = oldQuantity + submittedEntry.quantity;
+        if (submittedEntry && currentStock) {
+          console.log("submitted");
+          let oldQuantity = currentStock.quantity;
 
-        await submittedEntry.save();
-        await currentStock.save();
-      }
-      else {
-        console.log("not");
-        isError = true;
-      }
-    }, function (err) {
-      if (isError) {
-        return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
-      } else {
-        return res.status(200).json({ status: "Uspješno potvrđeni svi unosi!" });
-      }
-    });
+          submittedEntry.isSubmitted = true;
+          submittedEntry.old_quantity = oldQuantity;
+          currentStock.quantity = oldQuantity + submittedEntry.quantity;
+
+          await submittedEntry.save();
+          await currentStock.save();
+        }
+        else {
+          console.log("not");
+          isError = true;
+        }
+        resolve();
+      });
+    }));
+    console.log("iserror");
+    if (isError) {
+      return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
+    } else {
+      return res.status(200).json({ status: "Uspješno potvrđeni svi unosi!" });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
