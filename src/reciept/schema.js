@@ -19,10 +19,6 @@ let reciept = new Schema(
       ref: "user",
       required: true,
     },
-    old_quantity: {
-      type: Number,
-      required: false,
-    },
     quantity: {
       type: Number,
       required: true,
