@@ -17,7 +17,6 @@ async function submitEntries(req, res) {
     let isError = false;
 
     async.forEach(result.value.entry_ids, function (id, callback) {
-      //do stuff
       const submittedEntry = await Entry.findById(id);
       const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
