@@ -21,7 +21,6 @@ async function submitEntries(req, res) {
       const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
       if (submittedEntry && currentStock) {
-        console.log("submitted");
         let oldQuantity = currentStock.quantity;
 
         submittedEntry.isSubmitted = true;
@@ -33,10 +32,8 @@ async function submitEntries(req, res) {
       }
       else {
         isError = true;
-        console.log("nije");
       }
     };
-    console.log("isErrorr");
     if (isError) {
       return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
     } else {
