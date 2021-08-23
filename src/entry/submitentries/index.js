@@ -15,34 +15,33 @@ async function submitEntries(req, res) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
     let isError = false;
-    const startJobs = async () => {
-      await asyncForEach(result.value.entry_ids, async (id) => {
+    await Promise.all(result.value.entry_ids.forEach(async (id) => {
 
-        const submittedEntry = await Entry.findById(id);
-        const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
+      const submittedEntry = await Entry.findById(id);
+      const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
-        if (submittedEntry && currentStock) {
-          console.log("submitted");
-          let oldQuantity = currentStock.quantity;
+      if (submittedEntry && currentStock) {
+        console.log("submitted");
+        let oldQuantity = currentStock.quantity;
 
-          submittedEntry.isSubmitted = true;
-          submittedEntry.old_quantity = oldQuantity;
-          currentStock.quantity = oldQuantity + submittedEntry.quantity;
+        submittedEntry.isSubmitted = true;
+        submittedEntry.old_quantity = oldQuantity;
+        currentStock.quantity = oldQuantity + submittedEntry.quantity;
 
-          await submittedEntry.save();
-          await currentStock.save();
-        }
-        else {
-          isError = true;
-        }
-      });
-      if (isError) {
-        return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
-      } else {
-        return res.status(200).json({ status: "Uspješno potvrđeni svi unosi!" });
+        await submittedEntry.save();
+        await currentStock.save();
       }
-    };
-    
+      else {
+        isError = true;
+      }
+    }));
+    console.log("iserror");
+    if (isError) {
+      return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
+    } else {
+      return res.status(200).json({ status: "Uspješno potvrđeni svi unosi!" });
+    }
+
     startJobs();
   } catch (err) {
     console.log(err);
