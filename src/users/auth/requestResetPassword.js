@@ -41,9 +41,9 @@ async function requestResetPassword(req, res) {
         newNotificationLog.notification_type_id = notificationType._id;
         newNotificationLog.subject = subject;
         newNotificationLog.email = user.email;
-        newNotificationLog.data = "Zahtjev vrijedi do: " + moment(new Date()).add(14, "hours").format("DD/MM/YYYY HH:mm");
+        newNotificationLog.data = "Zahtjev vrijedi do " + moment(new Date()).add(14, "hours").format("DD/MM/YYYY HH:mm") + "h";
         await newNotificationLog.save();
-        
+
         const url = "https://upravljanjeskladistima.vercel.app/resetpassword";
         let link = url + "?id=" + newPasswordRequest._id;
         const transporter = nodemailer.createTransport({
