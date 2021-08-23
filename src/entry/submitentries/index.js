@@ -40,7 +40,25 @@ async function submitEntries(req, res) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
     let isError = false;
+    const asyncUppercase = item =>
+      new Promise(resolve =>
+        setTimeout(
+          () => resolve(item.toUpperCase()),
+          Math.floor(Math.random() * 1000)
+        )
+      );
 
+    const uppercaseItems = async () => {
+      const items = ['a', 'b', 'c'];
+      await items.forEach(async item => {
+        const uppercaseItem = await asyncUppercase(item);
+        console.log(uppercaseItem);
+      });
+
+      console.log('Items processed');
+    };
+
+    uppercaseItems();
 
 
     forEachAsync(result.value.entry_ids, function (e, cb) {
