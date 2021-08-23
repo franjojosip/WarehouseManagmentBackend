@@ -36,7 +36,7 @@ async function submitEntries(req, res) {
         console.log("nije");
       }
     });
-    test();
+    await test();
     console.log("submitted");
     if (isError) {
       return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
