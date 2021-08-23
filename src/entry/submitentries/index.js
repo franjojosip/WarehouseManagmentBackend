@@ -7,6 +7,7 @@ const serializer = Joi.object({
 });
 
 async function submitEntries(req, res) {
+  console.log(req.body);
   try {
     const result = serializer.validate(req.body);
     if (result.error) {
