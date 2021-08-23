@@ -16,8 +16,7 @@ async function submitEntries(req, res) {
       return res.status(400).json({ error: "Poslani su neispravni podatci!" });
     }
     let isError = false;
-    asyncLoop(result.value.entry_ids, function (id, next) {
-
+    for (let i = 0; i < result.value.entry_ids.length; i++) {
       const submittedEntry = await Entry.findById(id);
       const currentStock = await Stock.findOne({ warehouse_id: submittedEntry.warehouse_id, product_id: submittedEntry.product_id });
 
@@ -36,16 +35,13 @@ async function submitEntries(req, res) {
         isError = true;
         console.log("nije");
       }
-      next();
-    }, function () {
-      console.log("isErrorr");
-      if (isError) {
-        return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
-      } else {
-        return res.status(200).json({ status: "Uspješno potvrđeni svi unosi!" });
-      }
-    });
-    console.log("submitted");
+    }
+    console.log("isErrorr");
+    if (isError) {
+      return res.status(404).json({ error: "Dio proizvoda se ne nalazi na odabranom skladištu, molimo provjerite unose!" });
+    } else {
+      return res.status(200).json({ status: "Uspješno potvrđeni svi unosi!" });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
