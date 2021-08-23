@@ -25,6 +25,7 @@ async function submit(req, res) {
       }
 
       submittedReciept.isSubmitted = true;
+      submittedReciept.old_quantity = oldQuantity;
       currentStock.quantity = oldQuantity - submittedReciept.quantity;
 
       if (currentStock.quantity <= currentStock.minimum_quantity) {

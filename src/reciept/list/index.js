@@ -2,6 +2,7 @@ const Reciept = require("../schema");
 const Location = require("../../location/schema");
 const Product = require("../../product/schema");
 const User = require("../../users/schema");
+const Stock = require("../../stock/schema");
 
 async function list(req, res) {
   try {
@@ -24,10 +25,12 @@ async function list(req, res) {
 
     let locations = await Location.find({}).populate("city_id", { name: 1 });
     let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
+    let stocks = await Stock.find({});
 
     reciepts = reciepts.map((reciept) => {
       let location = locations.find(location => location.id == reciept.warehouse_id.location_id);
       let product = products.find(product => product.id == reciept.product_id.id);
+      let stock = stocks.find(stock => stock.warehouse_id == reciept.warehouse_id.id && stock.product_id == reciept.product_id.id);
 
       return {
         id: reciept.id,
@@ -47,7 +50,9 @@ async function list(req, res) {
         packaging_name: product.packaging_id.name,
         user_id: reciept.user_id.id,
         user_name: reciept.user_id.fname + " " + reciept.user_id.fname,
+        old_quantity: reciept.old_quantity ? reciept.old_quantity : stock.quantity,
         quantity: reciept.quantity,
+        new_quantity: reciept.old_quantity ? reciept.old_quantity + reciept.quantity : stock.quantity + reciept.quantity,
         date_created: reciept.createdAt,
         isSubmitted: reciept.isSubmitted
       };
