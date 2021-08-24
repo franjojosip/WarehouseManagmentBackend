@@ -1,7 +1,6 @@
 const Entry = require("../schema");
 const Stock = require("../../stock/schema");
 const Joi = require("joi");
-var asyncLoop = require('node-async-loop');
 
 const serializer = Joi.object({
   entry_ids: Joi.array().required(),
@@ -9,7 +8,6 @@ const serializer = Joi.object({
 });
 
 async function submitEntries(req, res) {
-  console.log(req.body);
   try {
     const result = serializer.validate(req.body);
     if (result.error) {

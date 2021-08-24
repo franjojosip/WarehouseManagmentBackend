@@ -9,12 +9,14 @@ const add = require("./add/index");
 const remove = require("./remove/index");
 const edit = require("./edit/index");
 const submit = require("./submit/index");
+const submitReciepts = require("./submitreciepts/index");
 const report = require("./report/index");
 
 router.post("/", authenticateJWT, list);
 router.post("/report", authenticateJWT, report);
 router.post("/add", authenticateJWT, add);
 router.delete("/remove/:id", checkParamID, authenticateJWT, remove);
+router.path("/submitall", authenticateJWT, submitReciepts);
 router.patch("/:id", checkParamID, authenticateJWT, edit);
 router.patch("/submit/:id", checkParamID, authenticateJWT, submit);
 
