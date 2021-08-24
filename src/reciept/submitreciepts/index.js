@@ -5,7 +5,6 @@ const NotificationType = require("../../notification_type/schema");
 const NotificationSetting = require("../../notification_settings/schema");
 var nodemailer = require('nodemailer');
 const moment = require("moment");
-var nodemailer = require('nodemailer');
 var fs = require('fs');
 const { default: jsPDF } = require("jspdf");
 require('jspdf-autotable');
