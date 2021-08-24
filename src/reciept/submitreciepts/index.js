@@ -1,11 +1,14 @@
 const Reciept = require("../schema");
 const Stock = require("../../stock/schema");
-const Location = require("../../location/schema");
-const Product = require("../../product/schema");
 const NotificationLog = require("../../notification_log/schema");
 const NotificationType = require("../../notification_type/schema");
 const NotificationSetting = require("../../notification_settings/schema");
 var nodemailer = require('nodemailer');
+const moment = require("moment");
+var nodemailer = require('nodemailer');
+var fs = require('fs');
+const { default: jsPDF } = require("jspdf");
+require('jspdf-autotable');
 
 const serializer = Joi.object({
     reciept_ids: Joi.array().required(),
