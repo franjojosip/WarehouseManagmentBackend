@@ -8,6 +8,7 @@ const moment = require("moment");
 var fs = require('fs');
 const { default: jsPDF } = require("jspdf");
 require('jspdf-autotable');
+const Joi = require("joi");
 
 const serializer = Joi.object({
     reciept_ids: Joi.array().required(),
