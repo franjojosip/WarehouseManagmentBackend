@@ -8,8 +8,8 @@ const Joi = require("joi");
 const serializer = Joi.object({
     start_date: Joi.string().length(10).required(),
     end_date: Joi.string().length(10).required(),
-    city_id: Joi.string().required(),
-    location_id: Joi.string().required()
+    city_id: Joi.string().allow(''),
+    location_id: Joi.string().allow('')
 });
 
 async function report(req, res) {
