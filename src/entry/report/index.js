@@ -8,6 +8,8 @@ const Joi = require("joi");
 const serializer = Joi.object({
     start_date: Joi.string().length(10).required(),
     end_date: Joi.string().length(10).required(),
+    city_id: Joi.string(),
+    location_id: Joi.string()
 });
 
 async function report(req, res) {
@@ -17,18 +19,28 @@ async function report(req, res) {
         if (result.error) {
             return res.status(400).json({ error: "Poslani su neispravni podatci!" });
         }
-        
+        if (req.body.city_id.length != 0 && req.body.city_id.length != 24 || req.body.location_id.length != 0 && req.body.location_id.length != 24) {
+            return res.status(400).json({ error: "Poslani su neispravni podatci!" });
+        }
+
         let entries = await Entry.find({
             isSubmitted: true,
             createdAt: {
-              $gte: moment(req.body.start_date, 'YYYY/MM/DD').startOf('day').toDate(),
-              $lte: moment(req.body.end_date, 'YYYY/MM/DD').endOf('day').toDate()
+                $gte: moment(req.body.start_date, 'YYYY/MM/DD').startOf('day').toDate(),
+                $lte: moment(req.body.end_date, 'YYYY/MM/DD').endOf('day').toDate()
             }
         })
             .populate("warehouse_id", { name: 1, location_id: 1 })
             .populate("product_id", { name: 1 })
             .populate("user_id", { fname: 1, lname: 1 })
             .sort({ createdAt: 'desc' });
+
+        if (req.body.city_id != "") {
+            entries = entries.filter(entry => entry.location_id.city_id == req.body.city_id);
+        }
+        if (req.body.location_id != "") {
+            entries = entries.filter(entry => entry.location_id.id == req.body.location_id);
+        }
 
         let locations = await Location.find({}).populate("city_id", { name: 1 });
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
@@ -91,64 +103,64 @@ async function report(req, res) {
 
 function compareCategory(a, b) {
     if (a.category_name < b.category_name) {
-      return -1;
+        return -1;
     }
     if (a.category_name > b.category_name) {
-      return 1;
+        return 1;
     }
     return 0;
-  }
-  function compareSubcategory(a, b) {
+}
+function compareSubcategory(a, b) {
     if (a.category_name == b.category_name && a.subcategory_name < b.subcategory_name) {
-      return -1;
+        return -1;
     }
     if (a.category_name == b.category_name && a.subcategory_name > b.subcategory_name) {
-      return 1;
+        return 1;
     }
     return 0;
-  }
-  
-  function comparePackaging(a, b) {
+}
+
+function comparePackaging(a, b) {
     if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name < b.packaging_name) {
-      return -1;
+        return -1;
     }
     if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name > b.packaging_name) {
-      return 1;
+        return 1;
     }
     return 0;
-  }
-  
-  function compareProduct(a, b) {
+}
+
+function compareProduct(a, b) {
     if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name < b.product_name) {
-      return -1;
+        return -1;
     }
     if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name > b.product_name) {
-      return 1;
+        return 1;
     }
     return 0;
-  }
-  
-  function compareCity(a, b) {
+}
+
+function compareCity(a, b) {
     if (a.city_name < b.city_name) {
-      return -1;
+        return -1;
     }
     if (a.city_name > b.city_name) {
-      return 1;
+        return 1;
     }
     return 0;
-  }
-  
-  function compareLocation(a, b) {
+}
+
+function compareLocation(a, b) {
     if (a.city_name == b.city_name && a.location_name < b.location_name) {
-      return -1;
+        return -1;
     }
     if (a.city_name == b.city_name && a.location_name > b.location_name) {
-      return 1;
+        return 1;
     }
     return 0;
-  }
-  
-  function compareWarehouse(a, b) {
+}
+
+function compareWarehouse(a, b) {
     if (a.city_name == b.city_name && a.location_name == b.location_name && a.warehouse_name > b.warehouse_name) {
         return -1;
     }
@@ -156,7 +168,7 @@ function compareCategory(a, b) {
         return 1;
     }
     return 0;
-  }
+}
 
 function replaceUtf8(word) {
     return word
