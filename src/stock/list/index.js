@@ -52,10 +52,30 @@ async function list(req, res) {
       };
     });
 
-    return res.status(200).json({ stocks });
+    return res.status(200).json({ stocks: stocks.sort(compareCity).sort(compareLocation) });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
+}
+
+function compareCity(a, b) {
+  if (a.city_name < b.city_name) {
+    return -1;
+  }
+  if (a.city_name > b.city_name) {
+    return 1;
+  }
+  return 0;
+}
+
+function compareLocation(a, b) {
+  if (a.city_name == b.city_name && a.location_name < b.location_name) {
+    return -1;
+  }
+  if (a.city_name == b.city_name && a.location_name > b.location_name) {
+    return 1;
+  }
+  return 0;
 }
 
 module.exports = list;
