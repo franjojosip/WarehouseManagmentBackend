@@ -35,13 +35,12 @@ async function report(req, res) {
             .populate("user_id", { fname: 1, lname: 1 })
             .sort({ createdAt: 'desc' });
 
-        console.log(entries);
         let locations = await Location.find({}).populate("city_id", { name: 1 });
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
 
         if (req.body.city_id.length == 24) {
-            let locationIds = locations.filter(location => location.city_id.id == req.body.city_id).map(location => location.id);
-            console.log(locationids)
+            let filteredLocations = locations.filter(location => location.city_id.id == req.body.city_id);
+            console.log(filteredLocations);
             entries = entries.filter(entry => locationIds.findIndex(entry.warehouse_id.location_id) != -1);
         }
         if (req.body.location_id.length == 24) {
@@ -57,7 +56,6 @@ async function report(req, res) {
                 product.subcategory_id = { id: "", name: "" };
             }
 
-            console.log(moment(entry.createdAt).format('DD.MM.YYYY.'));
             let filteredEntries = reportEntries.filter(reportEntry =>
                 reportEntry.warehouse_id == entry.warehouse_id.id
                 && reportEntry.product_id == entry.product_id.id
@@ -94,20 +92,20 @@ async function report(req, res) {
         }
         let grouppedReportEntries = [];
 
-        reportEntries.forEach(entry => {
-            let filteredEntries = grouppedReportEntries.filter(grouppedEntry => grouppedEntry.warehouse_id == entry.warehouse_id);
+        reportEntries.forEach(reportEntry => {
+            let filteredEntries = grouppedReportEntries.filter(grouppedEntry => grouppedEntry.warehouse_id == reportEntry.warehouse_id);
             if (grouppedReportEntries.length == 0 || filteredEntries.length == 0) {
                 grouppedReportEntries.push({
-                    warehouse_id: entry.warehouse_id,
-                    warehouse_name: entry.warehouse_name,
-                    city_name: entry.city_name,
-                    location_name: entry.location_name,
-                    data: [entry]
+                    warehouse_id: reportEntry.warehouse_id,
+                    warehouse_name: reportEntry.warehouse_name,
+                    city_name: reportEntry.city_name,
+                    location_name: reportEntry.location_name,
+                    data: [reportEntry]
                 })
             }
             else {
                 let index = grouppedReportEntries.indexOf(filteredEntries[0]);
-                grouppedReportEntries[index].data.push(entry);
+                grouppedReportEntries[index].data.push(reportEntry);
             }
         });
 
