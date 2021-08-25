@@ -41,16 +41,9 @@ async function report(req, res) {
         if (req.body.city_id.length == 24) {
             let filteredLocations = locations.filter(location => location.city_id.id == req.body.city_id);
             let locationIds = filteredLocations.map(item => item.id);
-            console.log(locationIds);
-            entries.forEach(item => {
-                console.log(item.warehouse_id.location_id);
-                console.log(locationIds.indexOf(item.warehouse_id.location_id.toString()));
-            })
-            //entries = entries.filter(entry => locationIds.indexOf(entry.warehouse_id.location_id) != -1);
-            //console.log(entries);
+            entries = entries.filter(entry => locationIds.indexOf(entry.warehouse_id.location_id.toString()) != -1);
         }
         if (req.body.location_id.length == 24) {
-            console.log(req.body.location_id.length);
             entries = entries.filter(entry => entry.warehouse_id.location_id == req.body.location_id);
         }
 
