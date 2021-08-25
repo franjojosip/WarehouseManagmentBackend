@@ -14,10 +14,30 @@ async function list(req, res) {
         role_name: user.role_id.name
       };
     });
-    return res.status(200).json({ users });
+    return res.status(200).json({ users: users.sort(compare).sort(deepCompare) });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
+}
+
+function compare(a, b) {
+  if (a.role_name < b.role_name) {
+    return -1;
+  }
+  if (a.role_name > b.role_name) {
+    return 1;
+  }
+  return 0;
+}
+
+function deepCompare(a, b) {
+  if (a.role_name == b.role_name && (a.fname + a.lname) < (b.fname + b.lname)) {
+    return -1;
+  }
+  if (a.role_name == b.role_name && (a.fname + a.lname) > (b.fname + b.lname)) {
+    return 1;
+  }
+  return 0;
 }
 
 module.exports = list;
