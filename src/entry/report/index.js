@@ -77,7 +77,7 @@ async function report(req, res) {
             })
         });
         if (reportEntries.length > 0) {
-            reportEntries = reportEntries.sort(compareCategory).sort(compareSubcategory).sort(deepCompareProducts)
+            reportEntries = reportEntries.sort(compareCategory).sort(compareSubcategory).sort(comparePackaging).sort(compareProduct)
         }
         let grouppedReportEntries = [];
 
