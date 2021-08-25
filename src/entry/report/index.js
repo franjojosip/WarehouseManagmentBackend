@@ -56,25 +56,37 @@ async function report(req, res) {
                 entry.subcategory_id = { id: "", name: "" };
                 product.subcategory_id = { id: "", name: "" };
             }
-            reportEntries.push({
-                warehouse_id: entry.warehouse_id.id,
-                warehouse_name: replaceUtf8(entry.warehouse_id.name),
-                city_id: location.city_id.id,
-                city_name: replaceUtf8(location.city_id.name),
-                location_id: location.id,
-                location_name: replaceUtf8(location.street),
-                product_id: product.id,
-                product_name: replaceUtf8(product.name),
-                category_id: product.category_id.id,
-                category_name: replaceUtf8(product.category_id.name),
-                subcategory_id: product.subcategory_id != "" ? product.subcategory_id.id : "",
-                subcategory_name: product.subcategory_id != "" ? replaceUtf8(product.subcategory_id.name) : "",
-                packaging_id: product.packaging_id.id,
-                packaging_name: replaceUtf8(product.packaging_id.name),
-                quantity: entry.quantity,
-                user: replaceUtf8(entry.user_id.fname) + " " + replaceUtf8(entry.user_id.lname),
-                date: moment(entry.updatedAt).format('DD.MM.YYYY.')
-            })
+
+            let filteredEntries = reportEntries.filter(reportEntry =>
+                reportEntry.warehouse_id == entry.warehouse_id.id
+                && reportEntry.product_id == entry.product_id.id
+                && moment(reportEntry.createdAt).format('DD.MM.YYYY.') == moment(entry.createdAt).format('DD.MM.YYYY.')
+            );
+            if (filteredEntries.length == 0) {
+                reportEntries.push({
+                    warehouse_id: entry.warehouse_id.id,
+                    warehouse_name: replaceUtf8(entry.warehouse_id.name),
+                    city_id: location.city_id.id,
+                    city_name: replaceUtf8(location.city_id.name),
+                    location_id: location.id,
+                    location_name: replaceUtf8(location.street),
+                    product_id: product.id,
+                    product_name: replaceUtf8(product.name),
+                    category_id: product.category_id.id,
+                    category_name: replaceUtf8(product.category_id.name),
+                    subcategory_id: product.subcategory_id != "" ? product.subcategory_id.id : "",
+                    subcategory_name: product.subcategory_id != "" ? replaceUtf8(product.subcategory_id.name) : "",
+                    packaging_id: product.packaging_id.id,
+                    packaging_name: replaceUtf8(product.packaging_id.name),
+                    quantity: entry.quantity,
+                    user: replaceUtf8(entry.user_id.fname) + " " + replaceUtf8(entry.user_id.lname),
+                    date: moment(entry.createdAt).format('DD.MM.YYYY.')
+                })
+            }
+            else {
+                let index = reportEntries.indexOf(filteredEntries[0]);
+                reportEntries[index].quantity = reportEntries[index].quantity + entry.quantity;
+            }
         });
         if (reportEntries.length > 0) {
             reportEntries = reportEntries.sort(compareCategory).sort(compareSubcategory).sort(comparePackaging).sort(compareProduct)
