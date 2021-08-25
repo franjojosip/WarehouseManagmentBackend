@@ -15,7 +15,6 @@ const serializer = Joi.object({
 async function report(req, res) {
     try {
         delete req.body.userId;
-        console.log(req.body);
         const result = serializer.validate(req.body);
         if (result.error) {
             return res.status(400).json({ error: "Poslani su neispravni podatci!" });
@@ -57,7 +56,7 @@ async function report(req, res) {
                 product.subcategory_id = { id: "", name: "" };
             }
 
-            console.log(filteredEntries);
+            console.log(reportEntries);
             let filteredEntries = reportEntries.filter(reportEntry =>
                 reportEntry.warehouse_id == entry.warehouse_id.id
                 && reportEntry.product_id == entry.product_id.id
