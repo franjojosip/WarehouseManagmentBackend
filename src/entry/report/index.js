@@ -41,6 +41,7 @@ async function report(req, res) {
 
         if (req.body.city_id.length == 24) {
             let locationIds = locations.filter(location => location.city_id.id == req.body.city_id).map(location => location.id);
+            console.log(locationids)
             entries = entries.filter(entry => locationIds.findIndex(entry.warehouse_id.location_id) != -1);
         }
         if (req.body.location_id.length == 24) {
