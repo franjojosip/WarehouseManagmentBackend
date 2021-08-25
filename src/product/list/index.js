@@ -21,7 +21,7 @@ async function list(req, res) {
       };
       return object;
     });
-    return res.status(200).json({ products: products.sort(compare).sort(deepCompare).sort(nameCompare) });
+    return res.status(200).json({ products: products.sort(compare).sort(deepCompare).sort(packagingCompare).sort(nameCompare) });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
@@ -47,11 +47,21 @@ function deepCompare(a, b) {
   return 0;
 }
 
-function nameCompare(a, b) {
-  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.name < b.name) {
+function packagingCompare(a, b) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name < b.packaging_name) {
     return -1;
   }
-  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.name > b.name) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name > b.packaging_name) {
+    return 1;
+  }
+  return 0;
+}
+
+function nameCompare(a, b) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.name < b.name) {
+    return -1;
+  }
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.name > b.name) {
     return 1;
   }
   return 0;
