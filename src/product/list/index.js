@@ -38,20 +38,20 @@ function compare(a, b) {
 }
 
 function deepCompare(a, b) {
-  if (a.category_name[0] == b.category_name[0] && a.subcategory_name[0] < b.subcategory_name[0]) {
+  if (a.category_name == b.category_name && a.subcategory_name[0] < b.subcategory_name[0]) {
     return -1;
   }
-  if (a.category_name[0] == b.category_name[0] && a.subcategory_name[0] > b.subcategory_name[0]) {
+  if (a.category_name == b.category_name && a.subcategory_name[0] > b.subcategory_name[0]) {
     return 1;
   }
   return 0;
 }
 
 function nameCompare(a, b) {
-  if (a.category_name[0] == b.category_name[0] && a.subcategory_name[0] == b.subcategory_name[0] && a.name[0] < b.name[0]) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.name[0] < b.name[0]) {
     return -1;
   }
-  if (a.category_name[0] == b.category_name[0] && a.subcategory_name[0] == b.subcategory_name[0] && a.name[0] > b.name[0]) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.name[0] > b.name[0]) {
     return 1;
   }
   return 0;
