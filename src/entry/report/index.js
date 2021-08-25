@@ -35,15 +35,18 @@ async function report(req, res) {
             .populate("user_id", { fname: 1, lname: 1 })
             .sort({ createdAt: 'desc' });
 
-        console.log(entries);
         let locations = await Location.find({}).populate("city_id", { name: 1 });
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
 
-        if (req.body.city_id != "") {
+        if (req.body.city_id.length == 24) {
             let location = locations.find(location => location.city_id.id == req.body.city_id);
+            console.log(location);
+            console.log(entries);
             entries = entries.filter(entry => entry.warehouse_id.location_id == location.id);
         }
-        if (req.body.location_id != "") {
+        if (req.body.location_id.length == 24) {
+            console.log(req.body.location_id);
+            console.log(entries);
             entries = entries.filter(entry => entry.warehouse_id.location_id == req.body.location_id);
         }
 
@@ -62,7 +65,6 @@ async function report(req, res) {
                 && reportEntry.product_id == entry.product_id.id
                 && reportEntry.date == moment(entry.createdAt).format('DD.MM.YYYY.')
             );
-            console.log(filteredEntries.length);
             if (filteredEntries.length == 0) {
                 reportEntries.push({
                     warehouse_id: entry.warehouse_id.id,
