@@ -44,6 +44,7 @@ async function report(req, res) {
             console.log(locationIds);
             entries.forEach(item => {
                 console.log(item.warehouse_id.location_id);
+                console.log(locationIds.indexOf(item.warehouse_id.location_id));
             })
             //entries = entries.filter(entry => locationIds.indexOf(entry.warehouse_id.location_id) != -1);
             //console.log(entries);
