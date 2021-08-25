@@ -41,7 +41,7 @@ async function report(req, res) {
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
 
         if (req.body.city_id != "") {
-            let location = locations.find(location => location.city_id == req.body.city_id);
+            let location = locations.find(location => location.city_id.id == req.body.city_id);
             entries = entries.filter(entry => entry.warehouse_id.location_id == location.id);
         }
         if (req.body.location_id != "") {
