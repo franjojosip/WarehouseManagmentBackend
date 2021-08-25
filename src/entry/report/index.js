@@ -39,14 +39,10 @@ async function report(req, res) {
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
 
         if (req.body.city_id.length == 24) {
-            let location = locations.find(location => location.city_id.id == req.body.city_id);
-            console.log(location);
-            console.log(entries);
-            entries = entries.filter(entry => entry.warehouse_id.location_id == location.id);
+            let locationIds = locations.filter(location => location.city_id.id == req.body.city_id).map(location => location.id);
+            entries = entries.filter(entry => locationIds.findIndex(entry.warehouse_id.location_id) != -1);
         }
         if (req.body.location_id.length == 24) {
-            console.log(req.body.location_id);
-            console.log(entries);
             entries = entries.filter(entry => entry.warehouse_id.location_id == req.body.location_id);
         }
 
