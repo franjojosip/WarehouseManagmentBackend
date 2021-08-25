@@ -36,16 +36,17 @@ async function report(req, res) {
             .populate("user_id", { fname: 1, lname: 1 })
             .sort({ createdAt: 'desc' });
 
-            console.log(entries[0]);
-        if (req.body.city_id != "") {
-            entries = entries.filter(entry => entry.warehouse_id.location_id.city_id == req.body.city_id);
-        }
-        if (req.body.location_id != "") {
-            entries = entries.filter(entry => entry.location_id.id == req.body.location_id);
-        }
 
         let locations = await Location.find({}).populate("city_id", { name: 1 });
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
+
+        if (req.body.city_id != "") {
+            let location = locations.find(location => location.city_id == req.body.city_id);
+            entries = entries.filter(entry => entry.warehouse_id.location_id == location.id);
+        }
+        if (req.body.location_id != "") {
+            entries = entries.filter(entry => entry.location_id == req.body.location_id);
+        }
 
         let reportEntries = [];
         entries.forEach((entry) => {
