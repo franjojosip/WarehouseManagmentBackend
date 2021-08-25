@@ -36,8 +36,9 @@ async function report(req, res) {
             .populate("user_id", { fname: 1, lname: 1 })
             .sort({ createdAt: 'desc' });
 
+            console.log(entries[0]);
         if (req.body.city_id != "") {
-            entries = entries.filter(entry => entry.location_id.city_id == req.body.city_id);
+            entries = entries.filter(entry => entry.warehouse_id.location_id.city_id == req.body.city_id);
         }
         if (req.body.location_id != "") {
             entries = entries.filter(entry => entry.location_id.id == req.body.location_id);
