@@ -44,7 +44,7 @@ async function report(req, res) {
             entries = entries.filter(entry => entry.warehouse_id.location_id == location.id);
         }
         if (req.body.location_id != "") {
-            entries = entries.filter(entry => entry.location_id == req.body.location_id);
+            entries = entries.filter(entry => entry.warehouse_id.location_id == req.body.location_id);
         }
 
         let reportEntries = [];
