@@ -146,7 +146,7 @@ async function getPDFData(reciepts) {
         }
     });
     if (reportReciepts.length > 0) {
-        reportReciepts = reportReciepts.sort(compareCategories).sort(deepCompareProducts)
+        reportReciepts = reportReciepts.sort(compareCategory).sort(compareSubcategory).sort(comparePackaging).sort(compareProduct)
     }
     let grouppedReportReciepts = [];
 
@@ -166,7 +166,7 @@ async function getPDFData(reciepts) {
             grouppedReportReciepts[index].data.push(reciept);
         }
     });
-    return grouppedReportReciepts.sort(compareCities).sort(deepCompareLocations);
+    return grouppedReportReciepts.sort(compareCity).sort(compareLocation).sort(compareWarehouse);
 }
 
 function generatePdf(title, docTitle, data) {
@@ -331,45 +331,73 @@ function sendEmail(title, email, path) {
   });
 }
 
-
-function compareCategories(a, b) {
-    if (a.category_name[0] < b.category_name[0]) {
-        return -1;
-    }
-    if (a.category_name[0] > b.category_name[0]) {
-        return 1;
-    }
-    return 0;
+function compareCategory(a, b) {
+  if (a.category_name < b.category_name) {
+    return -1;
+  }
+  if (a.category_name > b.category_name) {
+    return 1;
+  }
+  return 0;
+}
+function compareSubcategory(a, b) {
+  if (a.category_name == b.category_name && a.subcategory_name < b.subcategory_name) {
+    return -1;
+  }
+  if (a.category_name == b.category_name && a.subcategory_name > b.subcategory_name) {
+    return 1;
+  }
+  return 0;
 }
 
-function deepCompareProducts(a, b) {
-    if (a.category_name[0] == b.category_name[0] && a.product_name[0] < b.product_name[0]) {
-        return -1;
-    }
-    if (a.category_name[0] == b.category_name[0] && a.product_name[0] > b.product_name[0]) {
-        return 1;
-    }
-    return 0;
+function comparePackaging(a, b) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name < b.packaging_name) {
+    return -1;
+  }
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name > b.packaging_name) {
+    return 1;
+  }
+  return 0;
 }
 
-function compareCities(a, b) {
-    if (a.city_name[0] < b.city_name[0]) {
-        return -1;
-    }
-    if (a.city_name[0] > b.city_name[0]) {
-        return 1;
-    }
-    return 0;
+function compareProduct(a, b) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name < b.product_name) {
+    return -1;
+  }
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name > b.product_name) {
+    return 1;
+  }
+  return 0;
 }
 
-function deepCompareLocations(a, b) {
-    if (a.city_name[0] == b.city_name[0] && a.location_name[0] < b.location_name[0]) {
-        return -1;
-    }
-    if (a.city_name[0] == b.city_name[0] && a.location_name[0] > b.location_name[0]) {
-        return 1;
-    }
-    return 0;
+function compareCity(a, b) {
+  if (a.city_name < b.city_name) {
+    return -1;
+  }
+  if (a.city_name > b.city_name) {
+    return 1;
+  }
+  return 0;
+}
+
+function compareLocation(a, b) {
+  if (a.city_name == b.city_name && a.location_name < b.location_name) {
+    return -1;
+  }
+  if (a.city_name == b.city_name && a.location_name > b.location_name) {
+    return 1;
+  }
+  return 0;
+}
+
+function compareWarehouse(a, b) {
+  if (a.city_name == b.city_name && a.location_name == b.location_name && a.warehouse_name > b.warehouse_name) {
+      return -1;
+  }
+  if (a.city_name == b.city_name && a.location_name == b.location_name && a.warehouse_name > b.warehouse_name) {
+      return 1;
+  }
+  return 0;
 }
 
 function replaceUtf8(word) {

@@ -17,12 +17,12 @@ async function report(req, res) {
         if (result.error) {
             return res.status(400).json({ error: "Poslani su neispravni podatci!" });
         }
-        
+
         let stocktakings = await Stocktaking.find({
             isSubmitted: true,
             createdAt: {
-              $gte: moment(req.body.start_date, 'YYYY/MM/DD').startOf('day').toDate(),
-              $lte: moment(req.body.end_date, 'YYYY/MM/DD').endOf('day').toDate()
+                $gte: moment(req.body.start_date, 'YYYY/MM/DD').startOf('day').toDate(),
+                $lte: moment(req.body.end_date, 'YYYY/MM/DD').endOf('day').toDate()
             }
         })
             .populate("warehouse_id", { name: 1, location_id: 1 })
@@ -72,7 +72,7 @@ async function report(req, res) {
             }
         });
         if (reportStocktakings.length > 0) {
-            reportStocktakings = reportStocktakings.sort(compareCategories).sort(deepCompareProducts)
+            reportStocktakings = reportStocktakings.sort(compareCategory).sort(compareSubcategory).sort(comparePackaging).sort(compareProduct)
         }
         let grouppedReportStocktakings = [];
 
@@ -93,47 +93,77 @@ async function report(req, res) {
             }
         });
 
-        return res.status(200).json({ stocktakings: grouppedReportStocktakings.sort(compareCities).sort(deepCompareLocations) });
+        return res.status(200).json({ stocktakings: grouppedReportStocktakings.sort(compareCity).sort(compareLocation).sort(compareWarehouse) });
     } catch (err) {
         return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
     }
 }
 
-function compareCategories(a, b) {
-    if (a.category_name[0] < b.category_name[0]) {
+function compareCategory(a, b) {
+    if (a.category_name < b.category_name) {
         return -1;
     }
-    if (a.category_name[0] > b.category_name[0]) {
+    if (a.category_name > b.category_name) {
         return 1;
     }
     return 0;
 }
 
-function deepCompareProducts(a, b) {
-    if (a.category_name[0] == b.category_name[0] && a.product_name[0] < b.product_name[0]) {
+function compareSubcategory(a, b) {
+    if (a.category_name == b.category_name && a.subcategory_name < b.subcategory_name) {
         return -1;
     }
-    if (a.category_name[0] == b.category_name[0] && a.product_name[0] > b.product_name[0]) {
+    if (a.category_name == b.category_name && a.subcategory_name > b.subcategory_name) {
         return 1;
     }
     return 0;
 }
 
-function compareCities(a, b) {
-    if (a.city_name[0] < b.city_name[0]) {
+function comparePackaging(a, b) {
+    if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name < b.packaging_name) {
         return -1;
     }
-    if (a.city_name[0] > b.city_name[0]) {
+    if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name > b.packaging_name) {
         return 1;
     }
     return 0;
 }
 
-function deepCompareLocations(a, b) {
-    if (a.city_name[0] == b.city_name[0] && a.location_name[0] < b.location_name[0]) {
+function compareProduct(a, b) {
+    if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name < b.product_name) {
         return -1;
     }
-    if (a.city_name[0] == b.city_name[0] && a.location_name[0] > b.location_name[0]) {
+    if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name > b.product_name) {
+        return 1;
+    }
+    return 0;
+}
+
+function compareCity(a, b) {
+    if (a.city_name < b.city_name) {
+        return -1;
+    }
+    if (a.city_name > b.city_name) {
+        return 1;
+    }
+    return 0;
+}
+
+function compareLocation(a, b) {
+    if (a.city_name == b.city_name && a.location_name < b.location_name) {
+        return -1;
+    }
+    if (a.city_name == b.city_name && a.location_name > b.location_name) {
+        return 1;
+    }
+    return 0;
+}
+
+function compareWarehouse(a, b) {
+    if (a.city_name == b.city_name && a.location_name == b.location_name && a.warehouse_name > b.warehouse_name) {
+        return -1;
+    }
+    if (a.city_name == b.city_name && a.location_name == b.location_name && a.warehouse_name > b.warehouse_name) {
         return 1;
     }
     return 0;

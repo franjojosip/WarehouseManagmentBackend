@@ -19,20 +19,20 @@ async function list(req, res) {
 }
 
 function compare(a, b) {
-  if (a.city_name[0] < b.city_name[0]) {
+  if (a.city_name < b.city_name) {
     return -1;
   }
-  if (a.city_name[0] > b.city_name[0]) {
+  if (a.city_name > b.city_name) {
     return 1;
   }
   return 0;
 }
 
 function deepCompare(a, b) {
-  if (a.city_name[0] == b.city_name[0] && a.name[0] < b.name[0]) {
+  if (a.city_name == b.city_name && a.name < b.name) {
     return -1;
   }
-  if (a.city_name[0] == b.city_name[0] && a.name[0] > b.name[0]) {
+  if (a.city_name == b.city_name && a.name > b.name) {
     return 1;
   }
   return 0;

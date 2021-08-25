@@ -22,10 +22,10 @@ async function list(req, res) {
 }
 
 function compare(a, b) {
-    if (a.notification_type_name[0] < b.notification_type_name[0]) {
+    if (a.notification_type_name < b.notification_type_name) {
         return -1;
     }
-    if (a.notification_type_name[0] > b.notification_type_name[0]) {
+    if (a.notification_type_name > b.notification_type_name) {
         return 1;
     }
     return 0;

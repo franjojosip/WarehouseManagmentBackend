@@ -22,37 +22,37 @@ async function list(req, res) {
         users: warehouse.user_ids.length > 0 ? users : []
       };
     });
-    return res.status(200).json({ warehouses: warehouses.sort(compare).sort(deepCompare).sort(warehouseNameCompare) });
+    return res.status(200).json({ warehouses: warehouses.sort(compareCity).sort(compareLocation).sort(compareWarehouse) });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
 }
 
-function compare(a, b) {
-  if (a.city_name[0] < b.city_name[0]) {
+function compareCity(a, b) {
+  if (a.city_name < b.city_name) {
     return -1;
   }
-  if (a.city_name[0] > b.city_name[0]) {
+  if (a.city_name > b.city_name) {
     return 1;
   }
   return 0;
 }
 
-function deepCompare(a, b) {
-  if (a.city_name[0] == b.city_name[0] && a.location_name[0] < b.location_name[0]) {
+function compareLocation(a, b) {
+  if (a.city_name == b.city_name && a.location_name < b.location_name) {
     return -1;
   }
-  if (a.city_name[0] == b.city_name[0] && a.location_name[0] > b.location_name[0]) {
+  if (a.city_name == b.city_name && a.location_name > b.location_name) {
     return 1;
   }
   return 0;
 }
 
-function warehouseNameCompare(a, b) {
-  if (a.city_name[0] == b.city_name[0] && a.location_name[0] == b.location_name[0] && a.name[0] < b.name[0]) {
+function compareWarehouse(a, b) {
+  if (a.city_name == b.city_name && a.location_name == b.location_name && a.name < b.name) {
     return -1;
   }
-  if (a.city_name[0] == b.city_name[0] && a.location_name[0] == b.location_name[0] && a.name[0] > b.name[0]) {
+  if (a.city_name == b.city_name && a.location_name == b.location_name && a.name > b.name) {
     return 1;
   }
   return 0;

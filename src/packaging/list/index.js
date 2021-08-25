@@ -15,15 +15,4 @@ async function list(req, res) {
   }
 }
 
-function compare(a, b) {
-  if (a.name[0] < b.name[0]) {
-    return -1;
-  }
-  if (a.name[0] > b.name[0]) {
-    return 1;
-  }
-  return 0;
-}
-
-
 module.exports = list;

@@ -382,7 +382,7 @@ async function getPdfData() {
     }
   });
   if (reportStocks.length > 0) {
-    reportStocks = reportStocks.sort(compareCategories).sort(deepCompareProducts)
+    reportStocks = reportStocks.sort(compareCategory).sort(compareSubcategory).sort(comparePackaging).sort(compareProduct)
   }
   else {
     return [];
@@ -405,7 +405,7 @@ async function getPdfData() {
       grouppedReportReciepts[index].data.push(stock);
     }
   });
-  return grouppedReportReciepts.sort(compareCities).sort(deepCompareLocations);
+  return grouppedReportReciepts.sort(compareCity).sort(compareLocation).sort(compareWarehouse);
 }
 
 function replaceUtf8(word) {
@@ -415,45 +415,74 @@ function replaceUtf8(word) {
     .replace("đ", "d").replace("Đ", "D")
     .replace("ž", "z").replace("Ž", "Z");
 }
-function compareCategories(a, b) {
-  if (a.category_name[0] < b.category_name[0]) {
+
+function compareCategory(a, b) {
+  if (a.category_name < b.category_name) {
     return -1;
   }
-  if (a.category_name[0] > b.category_name[0]) {
+  if (a.category_name > b.category_name) {
+    return 1;
+  }
+  return 0;
+}
+function compareSubcategory(a, b) {
+  if (a.category_name == b.category_name && a.subcategory_name < b.subcategory_name) {
+    return -1;
+  }
+  if (a.category_name == b.category_name && a.subcategory_name > b.subcategory_name) {
     return 1;
   }
   return 0;
 }
 
-function deepCompareProducts(a, b) {
-  if (a.category_name[0] == b.category_name[0] && a.product_name[0] < b.product_name[0]) {
+function comparePackaging(a, b) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name < b.packaging_name) {
     return -1;
   }
-  if (a.category_name[0] == b.category_name[0] && a.product_name[0] > b.product_name[0]) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name > b.packaging_name) {
     return 1;
   }
   return 0;
 }
 
-function compareCities(a, b) {
-  if (a.city_name[0] < b.city_name[0]) {
+function compareProduct(a, b) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name < b.product_name) {
     return -1;
   }
-  if (a.city_name[0] > b.city_name[0]) {
+  if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name > b.product_name) {
     return 1;
   }
   return 0;
 }
 
-function deepCompareLocations(a, b) {
-  if (a.city_name[0] == b.city_name[0] && a.location_name[0] < b.location_name[0]) {
+function compareCity(a, b) {
+  if (a.city_name < b.city_name) {
     return -1;
   }
-  if (a.city_name[0] == b.city_name[0] && a.location_name[0] > b.location_name[0]) {
+  if (a.city_name > b.city_name) {
     return 1;
   }
   return 0;
 }
 
+function compareLocation(a, b) {
+  if (a.city_name == b.city_name && a.location_name < b.location_name) {
+    return -1;
+  }
+  if (a.city_name == b.city_name && a.location_name > b.location_name) {
+    return 1;
+  }
+  return 0;
+}
+
+function compareWarehouse(a, b) {
+  if (a.city_name == b.city_name && a.location_name == b.location_name && a.warehouse_name > b.warehouse_name) {
+      return -1;
+  }
+  if (a.city_name == b.city_name && a.location_name == b.location_name && a.warehouse_name > b.warehouse_name) {
+      return 1;
+  }
+  return 0;
+}
 
 module.exports = refresh;
