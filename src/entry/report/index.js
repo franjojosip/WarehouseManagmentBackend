@@ -8,13 +8,14 @@ const Joi = require("joi");
 const serializer = Joi.object({
     start_date: Joi.string().length(10).required(),
     end_date: Joi.string().length(10).required(),
-    city_id: Joi.string(),
-    location_id: Joi.string()
+    city_id: Joi.string().required(),
+    location_id: Joi.string().required()
 });
 
 async function report(req, res) {
     try {
         delete req.body.userId;
+        console.log(req.body);
         const result = serializer.validate(req.body);
         if (result.error) {
             return res.status(400).json({ error: "Poslani su neispravni podatci!" });
