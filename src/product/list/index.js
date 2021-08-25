@@ -28,13 +28,7 @@ async function list(req, res) {
 }
 
 function compare(a, b) {
-  if (a.category_name[0] < b.category_name[0]) {
-    return -1;
-  }
-  if (a.category_name[0] > b.category_name[0]) {
-    return 1;
-  }
-  return 0;
+  return a.category_name - b.category_name;
 }
 
 function deepCompare(a, b) {
