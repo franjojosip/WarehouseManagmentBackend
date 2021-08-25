@@ -60,7 +60,7 @@ async function list(req, res) {
         isSubmitted: reciept.isSubmitted
       };
     });
-    return res.status(200).json({ reciepts: reciepts.sort(compareCity).sort(compareLocation) });
+    return res.status(200).json({ reciepts: reciepts.sort(compareCity).sort(compareLocation).sort(compareWarehouse) });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
