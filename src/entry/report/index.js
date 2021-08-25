@@ -19,8 +19,8 @@ async function report(req, res) {
         if (result.error) {
             return res.status(400).json({ error: "Poslani su neispravni podatci!" });
         }
-        if (req.body.city_id.length != 0 && req.body.city_id.length != 24 || req.body.location_id.length != 0 && req.body.location_id.length != 24) {
-            return res.status(400).json({ error: "Poslani su neispravni podatci!" });
+        if (req.body.city_id != "" && req.body.city_id.length != 24 || req.body.location_id != "" && req.body.location_id.length != 24) {
+            return res.status(400).json({ error: "Poslan je neispravan ID grada ili ID lokacije!" });
         }
 
         let entries = await Entry.find({
