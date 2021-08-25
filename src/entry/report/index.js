@@ -26,8 +26,8 @@ async function report(req, res) {
         let entries = await Entry.find({
             isSubmitted: true,
             createdAt: {
-                $gte: moment(req.body.start_date, 'YYYY/MM/DD').toDate(),
-                $lte: moment(req.body.end_date, 'YYYY/MM/DD').toDate()
+                $gte: moment(req.body.start_date, 'YYYY/MM/DD').startOf('day').toDate(),
+                $lte: moment(req.body.end_date, 'YYYY/MM/DD').endOf('day').toDate()
             }
         })
             .populate("warehouse_id", { name: 1, location_id: 1 })
@@ -35,6 +35,7 @@ async function report(req, res) {
             .populate("user_id", { fname: 1, lname: 1 })
             .sort({ createdAt: 'desc' });
 
+        console.log(entries);
         let locations = await Location.find({}).populate("city_id", { name: 1 });
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
 
