@@ -56,11 +56,13 @@ async function report(req, res) {
                 product.subcategory_id = { id: "", name: "" };
             }
 
+            console.log(moment(entry.createdAt).format('DD.MM.YYYY.'));
             let filteredEntries = reportEntries.filter(reportEntry =>
                 reportEntry.warehouse_id == entry.warehouse_id.id
                 && reportEntry.product_id == entry.product_id.id
                 && reportEntry.date == moment(entry.createdAt).format('DD.MM.YYYY.')
             );
+            console.log(filteredEntries.length);
             if (filteredEntries.length == 0) {
                 reportEntries.push({
                     warehouse_id: entry.warehouse_id.id,
