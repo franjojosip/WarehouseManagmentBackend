@@ -60,7 +60,7 @@ async function report(req, res) {
             let filteredEntries = reportEntries.filter(reportEntry =>
                 reportEntry.warehouse_id == entry.warehouse_id.id
                 && reportEntry.product_id == entry.product_id.id
-                && moment(reportEntry.createdAt).format('DD.MM.YYYY.') == moment(entry.createdAt).format('DD.MM.YYYY.')
+                && reportEntry.date == moment(entry.createdAt).format('DD.MM.YYYY.')
             );
             if (filteredEntries.length == 0) {
                 reportEntries.push({
