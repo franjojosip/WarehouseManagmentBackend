@@ -85,7 +85,7 @@ async function report(req, res) {
             }
         });
         if (reportStocktakings.length > 0) {
-            reportStocktakings = reportStocktakings.sort(compareCategory).sort(compareSubcategory).sort(comparePackaging).sort(compareProduct)
+            reportStocktakings = reportStocktakings.sort(compareDate).sort(compareCategory).sort(compareSubcategory).sort(comparePackaging).sort(compareProduct)
         }
         let grouppedReportStocktakings = [];
 
@@ -112,42 +112,51 @@ async function report(req, res) {
         return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
     }
 }
-
-function compareCategory(a, b) {
-    if (a.category_name < b.category_name) {
+function compareDate(a, b) {
+    if ((moment(a.date).diff(moment(b.date), 'days') > 0)) {
         return -1;
     }
-    if (a.category_name > b.category_name) {
+    if ((moment(a.date).diff(moment(b.date), 'days') < 0)) {
+        return 1;
+    }
+    return 0;
+}
+
+function compareCategory(a, b) {
+    if (a.date == b.date && a.category_name < b.category_name) {
+        return -1;
+    }
+    if (a.date == b.date && a.category_name > b.category_name) {
         return 1;
     }
     return 0;
 }
 
 function compareSubcategory(a, b) {
-    if (a.category_name == b.category_name && a.subcategory_name < b.subcategory_name) {
+    if (a.date == b.date && a.category_name == b.category_name && a.subcategory_name < b.subcategory_name) {
         return -1;
     }
-    if (a.category_name == b.category_name && a.subcategory_name > b.subcategory_name) {
+    if (a.date == b.date && a.category_name == b.category_name && a.subcategory_name > b.subcategory_name) {
         return 1;
     }
     return 0;
 }
 
 function comparePackaging(a, b) {
-    if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name < b.packaging_name) {
+    if (a.date == b.date && a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name < b.packaging_name) {
         return -1;
     }
-    if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name > b.packaging_name) {
+    if (a.date == b.date && a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name > b.packaging_name) {
         return 1;
     }
     return 0;
 }
 
 function compareProduct(a, b) {
-    if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name < b.product_name) {
+    if (a.date == b.date && a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name < b.product_name) {
         return -1;
     }
-    if (a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name > b.product_name) {
+    if (a.date == b.date && a.category_name == b.category_name && a.subcategory_name == b.subcategory_name && a.packaging_name == b.packaging_name && a.product_name > b.product_name) {
         return 1;
     }
     return 0;
