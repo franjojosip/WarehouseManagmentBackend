@@ -8,6 +8,8 @@ const Joi = require("joi");
 const serializer = Joi.object({
     start_date: Joi.string().length(10).required(),
     end_date: Joi.string().length(10).required(),
+    city_id: Joi.string().allow(''),
+    location_id: Joi.string().allow('')
 });
 
 async function report(req, res) {
@@ -17,6 +19,10 @@ async function report(req, res) {
         if (result.error) {
             return res.status(400).json({ error: "Poslani su neispravni podatci!" });
         }
+        if (req.body.city_id != "" && req.body.city_id.length != 24 || req.body.location_id != "" && req.body.location_id.length != 24) {
+            return res.status(400).json({ error: "Poslan je neispravan ID grada ili ID lokacije!" });
+        }
+
 
         let stocktakings = await Stocktaking.find({
             isSubmitted: true,
@@ -33,6 +39,15 @@ async function report(req, res) {
         let locations = await Location.find({}).populate("city_id", { name: 1 });
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
 
+        if (req.body.city_id.length == 24) {
+            let filteredLocations = locations.filter(location => location.city_id.id == req.body.city_id);
+            let locationIds = filteredLocations.map(item => item.id);
+            stocktakings = stocktakings.filter(stocktaking => locationIds.indexOf(stocktaking.warehouse_id.location_id.toString()) != -1);
+        }
+        if (req.body.location_id.length == 24) {
+            stocktakings = stocktakings.filter(stocktaking => stocktaking.warehouse_id.location_id == req.body.location_id);
+        }
+
         let reportStocktakings = [];
         stocktakings.forEach((stocktaking) => {
             let location = locations.find(location => location.id == stocktaking.warehouse_id.location_id);
@@ -45,6 +60,7 @@ async function report(req, res) {
             let filteredStocktakings = reportStocktakings.filter(reportStocktaking =>
                 reportStocktaking.warehouse_id == stocktaking.warehouse_id.id
                 && reportStocktaking.product_id == stocktaking.product_id.id
+                && reportStocktaking.date == moment(stocktaking.createdAt).format('DD.MM.YYYY.')
             );
             if (filteredStocktakings.length == 0) {
                 reportStocktakings.push({
@@ -63,12 +79,9 @@ async function report(req, res) {
                     packaging_id: product.packaging_id.id,
                     packaging_name: replaceUtf8(product.packaging_id.name),
                     real_quantity: stocktaking.real_quantity,
-                    counted_quantity: stocktaking.counted_quantity
+                    counted_quantity: stocktaking.counted_quantity,
+                    date: moment(reciept.createdAt).format('DD.MM.YYYY.')
                 })
-            }
-            else {
-                let index = reportStocktakings.indexOf(filteredStocktakings[0]);
-                reportStocktakings[index].quantity = reportStocktakings[index].quantity + stocktaking.quantity;
             }
         });
         if (reportStocktakings.length > 0) {
