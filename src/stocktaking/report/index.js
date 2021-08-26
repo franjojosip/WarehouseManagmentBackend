@@ -80,7 +80,7 @@ async function report(req, res) {
                     packaging_name: replaceUtf8(product.packaging_id.name),
                     real_quantity: stocktaking.real_quantity,
                     counted_quantity: stocktaking.counted_quantity,
-                    date: moment(reciept.createdAt).format('DD.MM.YYYY.')
+                    date: moment(stocktaking.createdAt).format('DD.MM.YYYY.')
                 })
             }
         });
@@ -108,6 +108,7 @@ async function report(req, res) {
 
         return res.status(200).json({ stocktakings: grouppedReportStocktakings.sort(compareCity).sort(compareLocation).sort(compareWarehouse) });
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
     }
 }
