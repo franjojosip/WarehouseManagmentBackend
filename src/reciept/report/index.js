@@ -42,7 +42,7 @@ async function report(req, res) {
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
 
         
-        if (req.body.location_id.length == 24) {
+        if (req.body.warehouse_id.length == 24) {
             reciepts = reciepts.filter(reciept => reciept.warehouse_id.id == req.body.warehouse_id);
         }
         else{
