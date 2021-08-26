@@ -9,7 +9,8 @@ const serializer = Joi.object({
     start_date: Joi.string().length(10).required(),
     end_date: Joi.string().length(10).required(),
     city_id: Joi.string().allow(''),
-    location_id: Joi.string().allow('')
+    location_id: Joi.string().allow(''),
+    warehouse_id: Joi.string().allow('')
 });
 
 async function report(req, res) {
@@ -19,8 +20,10 @@ async function report(req, res) {
         if (result.error) {
             return res.status(400).json({ error: "Poslani su neispravni podatci!" });
         }
-        if (req.body.city_id != "" && req.body.city_id.length != 24 || req.body.location_id != "" && req.body.location_id.length != 24) {
-            return res.status(400).json({ error: "Poslan je neispravan ID grada ili ID lokacije!" });
+        if (req.body.city_id != "" && req.body.city_id.length != 24
+        || req.body.location_id != "" && req.body.location_id.length != 24
+        || req.body.warehouse_id != "" && req.body.warehouse_id.length != 24) {
+            return res.status(400).json({ error: "Poslan je neispravan ID grada, ID lokacije ili ID skladišta!" });
         }
 
         let reciepts = await Reciept.find({
@@ -38,13 +41,19 @@ async function report(req, res) {
         let locations = await Location.find({}).populate("city_id", { name: 1 });
         let products = await Product.find({}).populate("category_id", { name: 1 }).populate("subcategory_id", { name: 1 }).populate("packaging_id", { name: 1 });
 
-        if (req.body.city_id.length == 24) {
-            let filteredLocations = locations.filter(location => location.city_id.id == req.body.city_id);
-            let locationIds = filteredLocations.map(item => item.id);
-            reciepts = reciepts.filter(reciept => locationIds.indexOf(reciept.warehouse_id.location_id.toString()) != -1);
-        }
+        
         if (req.body.location_id.length == 24) {
-            reciepts = reciepts.filter(reciept => reciept.warehouse_id.location_id == req.body.location_id);
+            reciepts = reciepts.filter(reciept => reciept.warehouse_id.id == req.body.warehouse_id);
+        }
+        else{
+            if (req.body.city_id.length == 24) {
+                let filteredLocations = locations.filter(location => location.city_id.id == req.body.city_id);
+                let locationIds = filteredLocations.map(item => item.id);
+                reciepts = reciepts.filter(reciept => locationIds.indexOf(reciept.warehouse_id.location_id.toString()) != -1);
+            }
+            if (req.body.location_id.length == 24) {
+                reciepts = reciepts.filter(reciept => reciept.warehouse_id.location_id == req.body.location_id);
+            }
         }
 
         let reportReciepts = [];
