@@ -110,6 +110,7 @@ async function report(req, res) {
 
         return res.status(200).json({ reciepts: grouppedReportReciepts.sort(compareCity).sort(compareLocation).sort(compareWarehouse) });
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
     }
 }
