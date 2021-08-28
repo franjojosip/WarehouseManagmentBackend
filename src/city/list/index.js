@@ -3,14 +3,14 @@ const City = require("../schema");
 async function list(req, res) {
   try {
     let cities = await City.find({}).sort({ name: 'asc'});
-    let gradovi = cities.map((city) => {
+    cities = cities.map((city) => {
       return {
         id: city.id,
-        naziv: city.name,
-        postanski_broj: city.zip_code,
+        name: city.name,
+        zip_code: city.zip_code,
       };
     });
-    return res.status(200).json({ gradovi });
+    return res.status(200).json({ cities });
   } catch (err) {
     return res.status(500).json({ error: "Dogodila se pogreška, molimo kontaktirajte administratora!" });
   }
